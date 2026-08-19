@@ -501,42 +501,187 @@ export const INITIAL_KNOWLEDGE_GAPS: KnowledgeGapItem[] = [
 export const INITIAL_EARLY_WARNINGS: EarlyWarningItem[] = [
   {
     id: 'warn-01',
-    titleEn: 'Digital Onboarding Core Timeout Surge',
-    titleAr: 'ارتفاع حاد في مهلة الاستجابة للنظام المصرفي لتسجيل العملاء',
-    signals: ['↑ Reopened Jira Tickets (+35%)', '↑ Average Time in QA (+4.2 days)', '↑ Cross-squad Reassignments'],
-    confidence: 88,
-    firstDetected: '2 hours ago',
+    category: 'incident_risk',
+    categoryBadgeEn: 'Potential Emerging Issue Detected',
+    categoryBadgeAr: 'رصد مشكلة تشغيلية محتملة قيد التشكل',
+    titleEn: 'Digital Onboarding Core Timeout & Verification Bounce Surge',
+    titleAr: 'ارتفاع حاد في مهلة استجابة وتكرار ارتداد التحقق لتسجيل العملاء',
+    affectedService: 'Boubyan Mobile App (iOS / Android) • Digital Onboarding Gateway',
+    affectedSquadEn: 'Digital Banking Core Squad',
+    affectedSquadAr: 'فريق القنوات المصرفية الرقمية',
+    confidence: 94,
+    firstDetected: '45 minutes ago',
     status: 'Investigating',
-    impact: 'High',
-    affectedService: 'Boubyan Mobile App (iOS / Android)',
-    aiExplanationEn: 'AI detected a pattern matching the Q1 payment gateway incident: ticket churn between QA & Backend indicates an undocumented breaking API change.',
-    aiExplanationAr: 'رصد الذكاء الاصطناعي نمطاً مطابقاً لحادثة بوابة الدفع في الربع الأول: تكرار تنقل التذاكر بين فرق الجودة والتطوير يشير إلى تعديل غير موثق في الـ API.'
+    severityLevel: 'Critical',
+    whatChangedEn: 'Jira TT volume for biometric onboarding jumped +145% in the last 6 hours, while MTTR climbed from 18 mins to 74 mins.',
+    whatChangedAr: 'ارتفع حجم تذاكر الدعم (TT Volume) للتسجيل البيومتري بنسبة +145% خلال آخر 6 ساعات، مع استطالة زمن المعالجة من 18 إلى 74 دقيقة.',
+    signals: [
+      '↑ TT Volume Spike (+145% in 6h)',
+      '↑ Resolution Time Prolonged (18m → 74m)',
+      '↑ Cross-Squad Reassignments (3.4 hops/ticket)',
+      '↑ Repeated Failure Signatures on Face-Match SLA'
+    ],
+    signalsAr: [
+      '↑ تضاعف حجم تذاكر المشاكل (+145% في 6 ساعات)',
+      '↑ استطالة زمن المعالجة (من 18 إلى 74 دقيقة)',
+      '↑ تكرار تنقل التذاكر بين الفرق (3.4 مرات/تذكرة)',
+      '↑ تكرار نفس نمط الخطأ وتصاعد خطر تجاوز الـ SLA'
+    ],
+    historicalPatternEn: '98.2% pattern correlation with Q3-2025 Incident INC-8821 (Unindexed KYC cache table exhaustion prior to nationwide outage).',
+    historicalPatternAr: 'تطابق بنسبة 98.2% مع حادثة الربع الثالث INC-8821 (استنفاد ذاكرة التخزين المؤقت لجداول KYC قبل تعطل الخدمة الشامل).',
+    impactedSystemsEn: '~45,000 active prospective mobile bank customers; potential drop-off rate of 34% if unmitigated.',
+    impactedSystemsAr: '~45,000 مستخدم جديد متوقع لتطبيق الموبايل؛ وخطر فقدان 34% من عمليات فتح الحسابات الجديدة.',
+    recommendedActionEn: 'Recycle Redis cluster nodes, flush biometric session queue, and scale async verification workers by 4x.',
+    recommendedActionAr: 'إعادة تشغيل خوادم Redis، وتفريغ طابور جلسات التحقق، ومضاعفة خوادم المعالجة غير المتزامنة 4 أضعاف.',
+    leadTimeToImpactEn: '3.8 Days before widespread customer lockout',
+    leadTimeToImpactAr: '3.8 أيام قبل الوصول لحالة تجميد الخدمة الشاملة',
+    downtimeRiskMinutes: 240,
+    costProtectedKWD: 48000,
+    jiraSourceData: {
+      ttVolumeChange: '+145%',
+      resolutionTimeDelta: '+310%',
+      reassignmentHops: '3.4 avg hops',
+      slaRiskLevel: 'Critical (88% SLA at risk)'
+    }
   },
   {
     id: 'warn-02',
-    titleEn: 'Payment Gateway Settlement Reconciliation Queue',
-    titleAr: 'تكدس في طابور تسوية ومطابقة عمليات بوابات الدفع',
-    signals: ['↑ Error Log Volume (+140%)', '↑ Support Escalations from Finance', '↑ Unassigned Critical Defect Count'],
-    confidence: 94,
-    firstDetected: '35 minutes ago',
+    category: 'delivery_risk',
+    categoryBadgeEn: 'Potential Delivery Slowdown Detected',
+    categoryBadgeAr: 'رصد تباطؤ محتمل في وتيرة تسليم السبرنت',
+    titleEn: 'Corporate Open Banking API Release - Dependency Deadlock & Rework Surge',
+    titleAr: 'إصدار واجهات الصيرفة المفتوحة للشركات - انسداد في الاعتماديات وتزايد التعديلات',
+    affectedService: 'Corporate Treasury Portal & Open Banking Gateway v3.2',
+    affectedSquadEn: 'Corporate Payments & Open Banking Squad',
+    affectedSquadAr: 'فريق مدفوعات الشركات والصيرفة المفتوحة',
+    confidence: 91,
+    firstDetected: '3 hours ago',
     status: 'Investigating',
-    impact: 'High',
-    affectedService: 'Corporate Treasury & Merchant Settlement',
-    aiExplanationEn: 'Early indicator of KNET nightly settlement sync latency. Recommended auto-triggering the database connection pool mitigation playbook.',
-    aiExplanationAr: 'مؤشر مبكر على تأخر مطابقة KNET الليلية. يُوصى بتشغيل خطة الاستجابة الآلية لتوسيع حوض اتصالات قاعدة البيانات فوراً.'
+    severityLevel: 'Critical',
+    whatChangedEn: '3 interdependent Epics are blocked pending Enterprise Architecture Security Signoff; code churn / rework increased by +68%.',
+    whatChangedAr: 'توقف 3 مبادرات رئيسية بانتظار اعتماد الأمان المعماري؛ مع ارتفاع معدل إعادة كتابة الكود (Rework) بنسبة +68%.',
+    signals: [
+      '↑ Overdue Cross-Team Dependencies (4 blocking links)',
+      '↑ Rework Rate Climbing (+68% PR revisions)',
+      '↑ Teams Waiting on Pending Architecture Decision',
+      '↑ Sprint Velocity Deceleration (-42%)'
+    ],
+    signalsAr: [
+      '↑ تعثر اعتماديات متبادلة متأخرة (4 روابط مانعة للتسليم)',
+      '↑ ارتفاع معدل إعادة تعديل الكود (+68% تعديلات على PRs)',
+      '↑ فرق التطوير بانتظار قرار معماري معلق لأكثر من 5 أيام',
+      '↑ تباطؤ سرعة إنجاز السبرنت (-42% Sprint Velocity)'
+    ],
+    historicalPatternEn: 'Matches the Q4 2025 Mobile 4.0 Release Delay where unaddressed security reviews caused a 3-week sprint spillover.',
+    historicalPatternAr: 'مطابق لتأخر إطلاق تطبيق الموبايل في الربع الرابع 2025 حين تسببت المراجعات المعلقة في تأخير المشروع 3 أسابيع.',
+    impactedSystemsEn: 'Q1 Corporate Banking Go-Live Milestone; risk of delaying 8 enterprise client onboarding pipelines.',
+    impactedSystemsAr: 'الموعد النهائي لإطلاق بوابة الشركات في الربع الأول؛ وخطر تأخير ربط 8 عملاء من كبرى الشركات.',
+    recommendedActionEn: 'Trigger executive architectural sign-off fast-track and reassign 2 senior security engineers to review PR-4902.',
+    recommendedActionAr: 'تفعيل مسار الاعتماد المعماري السريع وتكليف اثنين من كبار مهندسي الأمان بمراجعة PR-4902 فوراً.',
+    leadTimeToImpactEn: '4.5 Days before full sprint spillover',
+    leadTimeToImpactAr: '4.5 أيام قبل كسر الموعد النهائي للسبرنت',
+    downtimeRiskMinutes: 480,
+    costProtectedKWD: 96000,
+    jiraSourceData: {
+      ttVolumeChange: '+28%',
+      resolutionTimeDelta: '+180%',
+      reassignmentHops: '4.2 squad hops',
+      slaRiskLevel: 'High Sprint Spillover Risk',
+      overdueDependenciesCount: 4,
+      reworkRateIncrease: '+68%'
+    }
   },
   {
     id: 'warn-03',
-    titleEn: 'Biometric Login Latency Drift in Kuwait Datacenter',
-    titleAr: 'انحراف في زمن استجابة تسجيل الدخول البيومتري في مركز بيانات الكويت',
-    signals: ['↑ 95th Percentile Latency (+180ms)', '↑ Retry Rate on FaceID', '↑ Auth Gateway Memory Usage'],
-    confidence: 76,
-    firstDetected: '4 hours ago',
+    category: 'incident_risk',
+    categoryBadgeEn: 'Potential Emerging Issue Detected',
+    categoryBadgeAr: 'رصد مشكلة تشغيلية محتملة قيد التشكل',
+    titleEn: 'KNET Nightly Settlement Queue & Dead-Letter Replay Latency Drift',
+    titleAr: 'انحراف في زمن معالجة طابور مطابقة KNET واسترجاع العمليات المتعثرة',
+    affectedService: 'Merchant Settlement & Payment Engine',
+    affectedSquadEn: 'Core Payments Squad',
+    affectedSquadAr: 'فريق المدفوعات المركزي',
+    confidence: 88,
+    firstDetected: '1 hour ago',
+    status: 'Investigating',
+    severityLevel: 'Warning',
+    whatChangedEn: 'Database connection pool utilization exceeded 89% during settlement reconciliations with recurrent connection retry errors.',
+    whatChangedAr: 'تجاوز استخدام منافذ قاعدة البيانات 89% أثناء تسوية العمليات مع ظهور أخطاء إعادة محاولة الاتصال المتكررة.',
+    signals: [
+      '↑ Database Connection Pool Saturation (89%)',
+      '↑ Reopened Settlement Tickets from Finance (+40%)',
+      '↑ Repeated Timeout Signatures on KNET Webhooks',
+      '↑ Risk of CBK Settlement Window Miss'
+    ],
+    signalsAr: [
+      '↑ تشبع منافذ اتصال قاعدة البيانات (89%)',
+      '↑ إعادة فتح تذاكر التسوية من الإدارة المالية (+40%)',
+      '↑ تكرار رسائل انتهاء المهلة على بوابات KNET',
+      '↑ خطر تفويت النافذة الزمنية المحددة من بنك الكويت المركزي'
+    ],
+    historicalPatternEn: 'Resembles the 2024 Black Friday database lock contention on merchant balances table.',
+    historicalPatternAr: 'يشبه واقعة حظر الجداول في نوفمبر 2024 أثناء ذروة تسويات المتاجر.',
+    impactedSystemsEn: '3,200 merchant accounts; potential financial ledger discrepancy and CBK regulatory audit scrutiny.',
+    impactedSystemsAr: '3,200 حساب تاجر؛ وخطر حدوث فروقات محاسبية وتنبيهات رقابية من البنك المركزي.',
+    recommendedActionEn: 'Execute auto-remediation: recycle connection pool, throttle non-critical batch analytics, and unindex query buffers.',
+    recommendedActionAr: 'تنفيذ المعالجة التلقائية: إعادة تدوير المنافذ، كبح الاستعلامات التحليلية غير العاجلة، وفصل طوابير المعالجة.',
+    leadTimeToImpactEn: '2.6 Days before settlement window failure',
+    leadTimeToImpactAr: '2.6 أيام قبل فوات نافذة التسوية المصرفية',
+    downtimeRiskMinutes: 120,
+    costProtectedKWD: 24500,
+    jiraSourceData: {
+      ttVolumeChange: '+85%',
+      resolutionTimeDelta: '+140%',
+      reassignmentHops: '2.8 avg hops',
+      slaRiskLevel: 'Warning (65% SLA at risk)'
+    }
+  },
+  {
+    id: 'warn-04',
+    category: 'delivery_risk',
+    categoryBadgeEn: 'Potential Delivery Slowdown Detected',
+    categoryBadgeAr: 'رصد تباطؤ محتمل في وتيرة تسليم السبرنت',
+    titleEn: 'Wealth Management Mobile Microservices - Cross-Squad Testing Bottleneck',
+    titleAr: 'الخدمات المصغرة لإدارة الثروات - اختناق في الاختبارات المتبادلة بين الفرق',
+    affectedService: 'Boubyan Wealth App & Investment Core Engine',
+    affectedSquadEn: 'Wealth Management Squad',
+    affectedSquadAr: 'فريق إدارة الثروات والاستثمار',
+    confidence: 82,
+    firstDetected: '5 hours ago',
     status: 'Monitoring',
-    impact: 'Medium',
-    affectedService: 'Identity & Access Management (IAM)',
-    aiExplanationEn: 'Predictive health scoring indicates memory pressure on authentication cluster node #4. Proactive container restart recommended.',
-    aiExplanationAr: 'تشير مؤشرات الصحة التنبؤية إلى ضغط على ذاكرة عقدة المصادقة رقم #4. يُوصى بإعادة تشغيل الحاوية استباقياً قبل تأثر العملاء.'
+    severityLevel: 'Warning',
+    whatChangedEn: 'QA test cycle duration increased from 1.5 days to 4.8 days due to mock environment instability; 12 defects ping-ponging.',
+    whatChangedAr: 'استطالة دورة اختبارات الجودة من 1.5 إلى 4.8 أيام نتيجة عدم استقرار بيئة المحاكاة؛ مع تنقل 12 تذكرة خلل ذهاباً وإياباً.',
+    signals: [
+      '↑ QA Cycle Duration Prolonged (1.5d → 4.8d)',
+      '↑ Ping-Pong Defect Reassignments (12 tickets bouncing)',
+      '↑ Downstream Squad Idle Time on Staging',
+      '↑ Projected Release Delay (+6 calendar days)'
+    ],
+    signalsAr: [
+      '↑ استطالة زمن دورة الاختبار (من 1.5 إلى 4.8 أيام)',
+      '↑ ارتداد تذاكر العيوب البرمجية بين المطورين وفاحصي الجودة (12 تذكرة)',
+      '↑ توقف الفرق الفرعية بانتظار استقرار بيئة الـ Staging',
+      '↑ توقع تأخر موعد الإطلاق النهائي (+6 أيام تقويمية)'
+    ],
+    historicalPatternEn: 'Matches the Q2 2025 Trading Hub integration backlog where environment drift delayed UAT sign-off.',
+    historicalPatternAr: 'مطابق لتأخر منصة التداول في الربع الثاني 2025 حين تسبب تباين البيئات في تعطل اختبارات القبول (UAT).',
+    impactedSystemsEn: 'High-Net-Worth VIP Portfolio Trading module launch.',
+    impactedSystemsAr: 'إطلاق وحدة التداول المالي لكبار عملاء بنك بوبيان.',
+    recommendedActionEn: 'Deploy containerized ephemeral test environments and reassign 1 test automation engineer to mock sandbox.',
+    recommendedActionAr: 'نشر بيئات اختبار سحابية معزولة ومؤتمتة وتخصيص مهندس أتمتة لفصل بيانات المحاكاة.',
+    leadTimeToImpactEn: '5.1 Days before launch milestone breach',
+    leadTimeToImpactAr: '5.1 أيام قبل تجاوز موعد الإطلاق الرسمي',
+    downtimeRiskMinutes: 180,
+    costProtectedKWD: 32000,
+    jiraSourceData: {
+      ttVolumeChange: '+45%',
+      resolutionTimeDelta: '+220%',
+      reassignmentHops: '3.9 avg hops',
+      slaRiskLevel: 'Moderate Delivery Friction',
+      overdueDependenciesCount: 3,
+      reworkRateIncrease: '+45%'
+    }
   }
 ];
 
@@ -616,34 +761,34 @@ export const DEMO_IDEAS: DemoIdea[] = [
     number: 3,
     titleEn: 'AI Early Warning System — Protecting Execution Speed',
     titleAr: 'نظام الإنذار المبكر الذكي — حماية سرعة التنفيذ',
-    subtitleEn: 'Proactive Risk Radar • Bottleneck Prevention • Zero-Interruption Velocity',
-    subtitleAr: 'رادار المخاطر الاستباقي • منع الاختناقات التشغيلية • استدامة سرعة الإطلاق',
+    subtitleEn: 'Early Signal → Early Action → Less Impact / Delay • Jira Pattern Intelligence',
+    subtitleAr: 'إشارة مبكرة ➔ تحقيق مبكر ➔ تدخل مبكر ➔ خفض الأثر والتأخير • ذكاء أنماط Jira',
     badgeEn: 'Execution & Reliability',
-    badgeAr: 'الموثوقية واستباقية التشغيل',
+    badgeAr: 'الموثوقية وحماية سرعة الإنجاز',
     icon: 'Radar',
     gradient: 'from-[#0A1931] to-[#10B981]',
     borderGlow: 'hover:border-[#10B981]',
     accentColor: '#10B981',
-    executiveValueEn: 'Shifts engineering governance from reactive post-mortems to predictive mitigation, detecting leading delivery and stability risks days before they cause outages.',
-    executiveValueAr: 'الانتقال من رد الفعل بعد وقوع المشاكل إلى التنبؤ الاستباقي بالمخاطر والاختناقات قبل أيام من تأثيرها على العملاء ومواعيد الإطلاق.',
-    roiEstimateEn: '60% Reduction in Production Incidents & 4.5 Days Faster Delivery Cycles',
-    roiEstimateAr: 'خفض 60% في الحوادث التشغيلية وتسريع مواعيد تسليم الخدمات بـ 4.5 أيام',
-    implementationTimeEn: '8–10 Weeks (Telemetry, CI/CD & APM Stream Processing)',
-    implementationTimeAr: '8 إلى 10 أسابيع (ربط مؤشرات الأنظمة وسجلات المراقبة)',
+    executiveValueEn: 'Analyzes combined Jira signals (TTs, SLAs, reassignments, recurring defects, overdue dependencies) to discover emerging incidents and delivery slowdowns before impact.',
+    executiveValueAr: 'ربط إشارات Jira المتعددة (تذاكر الدعم، الـ SLAs، تنقل المهام، تكرار الأخطاء، والاعتماديات العالقة) لكشف الحوادث وتعثر التسليم قبل فوات الأوان.',
+    roiEstimateEn: '60% Reduction in Production Incidents & 4.5 Days Lead Time Before SLA / Delivery Breaches',
+    roiEstimateAr: 'خفض 60% في الحوادث التشغيلية وكشف مسبق بـ 4.5 أيام قبل كسر الـ SLA وتأخر المشاريع',
+    implementationTimeEn: '6–8 Weeks (Jira Telemetry, Status History & Predictive Stream)',
+    implementationTimeAr: '6 إلى 8 أسابيع (ربط سجلات Jira ومؤشرات التدفق التشغيلي)',
     talkingPointsEn: [
-      'Analyzes ticket churn, reopened defect rates, and QA bottleneck clusters to forecast delivery delays.',
-      'Correlates code commit frequency with architectural complexity to identify potential outage triggers.',
-      'Recommends automated playbooks and resource reallocations to protect critical digital milestones.'
+      'Identifies multi-signal patterns (TT volume spike + MTTR drift + reassignments) rather than isolated metrics.',
+      'Extends beyond outages to detect delivery risks: overdue dependencies, rework surge, and pending decisions.',
+      'Answers the 5 critical questions: What changed? Contributing signals? Past pattern? Blast radius? Action needed?'
     ],
     talkingPointsAr: [
-      'تحليل تنقل التذاكر ومعدل إعادة فتح العيوب لتوقع تأخر مواعيد إطلاق الميزات المصرفية.',
-      'ربط التعديلات البرمجية بدرجة التعقيد المعماري لاكتشاف مخاطر الانقطاع المحتملة.',
-      'اقتراح خطط تدخل سريعة وإعادة توزيع المهام لضمان الالتزام بمواعيد المشاريع الاستراتيجية.'
+      'ربط الإشارات المشتركة (ارتفاع تذاكر الدعم + استطالة المعالجة + تنقل المهام) بدلاً من قراءة المؤشرات منعزلة.',
+      'تغطية مخاطر الإنجاز والتسليم: الاعتماديات المتأخرة، تزايد التعديلات (Rework)، والقرارات المعمارية العالقة.',
+      'الإجابة بوضوح على الأسئلة الخمسة: إيه اللي اتغير؟ إيه الإشارات؟ هل حصل قبل كده؟ إيه اللي هيتأثر؟ وإيه اللي محتاج مراجعة؟'
     ],
     keyMetrics: [
-      { labelEn: 'Predictive Lead Time', labelAr: 'زمن الكشف المسبق', value: '4.8 Days', trend: 'Ahead', isPositive: true },
-      { labelEn: 'Outage Prevention Rate', labelAr: 'نسبة تفادي الانقطاعات', value: '88%', trend: '+88%', isPositive: true },
-      { labelEn: 'Sprint Velocity Protected', labelAr: 'حماية سرعة السبرنت', value: '+32%', trend: 'Protected', isPositive: true }
+      { labelEn: 'Early-Warning Lead Time', labelAr: 'زمن الكشف المسبق', value: '4.5 Days', trend: 'Ahead', isPositive: true },
+      { labelEn: 'Detection Accuracy', labelAr: 'دقة رصد الأنماط', value: '96.4%', trend: 'High Precision', isPositive: true },
+      { labelEn: 'SLA & Delay Prevented', labelAr: 'حماية الـ SLA والتسليم', value: '-78%', trend: 'Less Delay', isPositive: true }
     ]
   }
 ];

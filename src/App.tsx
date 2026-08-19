@@ -66,8 +66,53 @@ export default function App() {
       />
 
       {/* Main Content Area - Responsive Scroll on Mobile, Single Screen on Desktop */}
-      <main className="flex-1 min-h-0 w-full max-w-[1600px] mx-auto px-2.5 sm:px-4 lg:px-5 py-2 sm:py-2.5 flex flex-col overflow-y-auto lg:overflow-hidden">
+      <main className="flex-1 min-h-0 w-full max-w-[1600px] mx-auto px-2 sm:px-4 lg:px-5 py-1.5 sm:py-2.5 flex flex-col overflow-y-auto lg:overflow-hidden">
         
+        {/* Mobile Fast-Switcher Bar when inside a Tool (Visible on mobile/tablet screens < lg) */}
+        {activeDemoId !== null && (
+          <div className="lg:hidden shrink-0 mb-2 p-1 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center gap-1 overflow-x-auto text-[11px] font-bold">
+            <button
+              onClick={() => setActiveDemoId('idea-1')}
+              className={`px-2.5 py-1.5 rounded-lg shrink-0 transition-all cursor-pointer flex items-center gap-1.5 ${
+                activeDemoId === 'idea-1'
+                  ? 'bg-[#9A1B38] text-white shadow-xs'
+                  : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FFB800]"></span>
+              <span>{isAr ? '01. الاجتماعات' : '01. Meetings'}</span>
+            </button>
+            <button
+              onClick={() => setActiveDemoId('idea-2')}
+              className={`px-2.5 py-1.5 rounded-lg shrink-0 transition-all cursor-pointer flex items-center gap-1.5 ${
+                activeDemoId === 'idea-2'
+                  ? 'bg-[#0284C7] text-white shadow-xs'
+                  : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-[#38BDF8]"></span>
+              <span>{isAr ? '02. المعرفة SOPs' : '02. Knowledge'}</span>
+            </button>
+            <button
+              onClick={() => setActiveDemoId('idea-3')}
+              className={`px-2.5 py-1.5 rounded-lg shrink-0 transition-all cursor-pointer flex items-center gap-1.5 ${
+                activeDemoId === 'idea-3'
+                  ? 'bg-[#059669] text-white shadow-xs'
+                  : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-[#34D399]"></span>
+              <span>{isAr ? '03. رادار الإنذار' : '03. Early Shield'}</span>
+            </button>
+            <button
+              onClick={() => setIsPresentationOpen(true)}
+              className="px-2.5 py-1.5 rounded-lg shrink-0 bg-amber-50 text-amber-900 border border-amber-200 transition-all cursor-pointer flex items-center gap-1 hover:bg-amber-100"
+            >
+              <span>{isAr ? '📊 العرض' : '📊 Deck'}</span>
+            </button>
+          </div>
+        )}
+
         {/* VIEW 1: HOME PAGE WITH 3 BIG BUTTONS */}
         {activeDemoId === null && (
           <ThreeBigButtonsGrid

@@ -84,16 +84,43 @@ export interface KnowledgeGapItem {
 
 export interface EarlyWarningItem {
   id: string;
+  category: 'incident_risk' | 'delivery_risk';
+  categoryBadgeEn: string;
+  categoryBadgeAr: string;
   titleEn: string;
   titleAr: string;
-  signals: string[]; // e.g. ['↑ Ticket Volume', '↑ Resolution Time', '↑ Reassignments']
   confidence: number;
   firstDetected: string;
   status: 'Investigating' | 'Monitoring' | 'Mitigated';
-  impact: 'High' | 'Medium' | 'Low';
+  severityLevel: 'Critical' | 'Warning' | 'Moderate';
   affectedService: string;
-  aiExplanationEn: string;
-  aiExplanationAr: string;
+  affectedSquadEn: string;
+  affectedSquadAr: string;
+  
+  // The 5 Core Questions explicitly required by user:
+  whatChangedEn: string; // 1. What changed?
+  whatChangedAr: string;
+  signals: string[]; // 2. Signals that raised concern
+  signalsAr: string[];
+  historicalPatternEn: string; // 3. Historical pattern match
+  historicalPatternAr: string;
+  impactedSystemsEn: string; // 4. What might be impacted?
+  impactedSystemsAr: string;
+  recommendedActionEn: string; // 5. What needs review?
+  recommendedActionAr: string;
+
+  leadTimeToImpactEn: string;
+  leadTimeToImpactAr: string;
+  downtimeRiskMinutes: number;
+  costProtectedKWD: number;
+  jiraSourceData: {
+    ttVolumeChange: string;
+    resolutionTimeDelta: string;
+    reassignmentHops: string;
+    slaRiskLevel: string;
+    overdueDependenciesCount?: number;
+    reworkRateIncrease?: string;
+  };
 }
 
 export interface DemoIdea {

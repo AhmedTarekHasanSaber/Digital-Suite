@@ -1,13 +1,13 @@
 import React from 'react';
 import { Language } from '../types';
-import { Globe, Presentation, Edit3, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Globe, Presentation, ArrowRight, ArrowLeft } from 'lucide-react';
 import { BoubyanOfficialLogo } from './BoubyanOfficialLogo';
 
 interface ExecutiveHeaderProps {
   lang: Language;
   onToggleLang: () => void;
   onOpenPresentation: () => void;
-  onOpenCustomize: () => void;
+  onOpenCustomize?: () => void;
   activeDemoId: string | null;
   onBackToHome: () => void;
   activeDemoTitle?: string;
@@ -17,7 +17,6 @@ export const ExecutiveHeader: React.FC<ExecutiveHeaderProps> = ({
   lang,
   onToggleLang,
   onOpenPresentation,
-  onOpenCustomize,
   activeDemoId,
   onBackToHome,
   activeDemoTitle
@@ -69,18 +68,6 @@ export const ExecutiveHeader: React.FC<ExecutiveHeaderProps> = ({
 
         {/* Right Side: Functional Executive Actions */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-          {/* Customize Ideas - Hidden in app #1 */}
-          {activeDemoId !== 'idea-1' && (
-            <button
-              onClick={onOpenCustomize}
-              className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-all cursor-pointer active:scale-95"
-              title={isAr ? 'تخصيص الأفكار' : 'Customize Ideas'}
-            >
-              <Edit3 className="w-3.5 h-3.5 text-[#8B263E]" />
-              <span className="hidden md:inline">{isAr ? 'تخصيص' : 'Customize'}</span>
-            </button>
-          )}
-
           {/* Presentation Deck Modal Button */}
           <button
             onClick={onOpenPresentation}

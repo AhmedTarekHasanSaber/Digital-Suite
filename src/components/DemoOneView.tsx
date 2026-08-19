@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { DemoIdea, Language, MeetingItem, MeetingRecommendation } from '../types';
 import { BOUBYAN_MEETING_ITEMS } from '../data/demosData';
 import { 
@@ -70,8 +70,18 @@ export const DemoOneView: React.FC<DemoOneViewProps> = ({ idea, lang }) => {
   const [chartVisualType, setChartVisualType] = useState<'spline' | 'bars'>('spline');
   const [activeChartMetric, setActiveChartMetric] = useState<'hours' | 'cost'>('hours');
   const [targetReductionPercent, setTargetReductionPercent] = useState<number>(45);
+  const [mobileTab, setMobileTab] = useState<'list' | 'diagnostic'>('list');
 
   const [lastExecutedValue, setLastExecutedValue] = useState<LastExecutedValue | null>(null);
+
+  useEffect(() => {
+    if (lastExecutedValue) {
+      const timer = setTimeout(() => {
+        setLastExecutedValue(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [lastExecutedValue]);
 
   // Department-specific hourly rates in KWD for realistic financial precision
   const getDepartmentRate = (dept: string): number => {
@@ -385,71 +395,91 @@ export const DemoOneView: React.FC<DemoOneViewProps> = ({ idea, lang }) => {
 
       </div>
 
-      {/* DISTINCT CUSTOMIZED REALIZED VALUE BANNER */}
+      {/* COMPACT FLOATING TOAST NOTIFICATION (Does not shift screen size) */}
       <AnimatePresence>
         {lastExecutedValue && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.98, y: -6 }}
+            initial={{ opacity: 0, scale: 0.92, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.98, y: -6 }}
-            className="shrink-0 p-2.5 rounded-xl bg-gradient-to-r from-[#0A1931] via-[#10294C] to-[#0A1931] border border-[#FFB800]/60 text-white shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-3 relative overflow-hidden"
+            exit={{ opacity: 0, scale: 0.92, y: 20 }}
+            className="fixed bottom-4 end-4 z-50 p-3 rounded-xl bg-[#0A1931]/95 text-white border border-[#FFB800]/50 shadow-2xl backdrop-blur-md max-w-sm flex items-start gap-2.5 font-sans"
           >
-            <div className="flex items-start gap-2.5 min-w-0">
-              <div className="p-2 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shrink-0 mt-0.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 animate-pulse" />
-              </div>
-              <div className="min-w-0">
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="text-[10px] uppercase tracking-wider font-bold text-[#FFB800]">
-                    {isAr ? 'الأثر المحقق لهذا القرار:' : 'Tailored Decision Impact:'}
-                  </span>
-                  <span className="text-xs font-bold text-white truncate max-w-[240px]">{lastExecutedValue.title}</span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-rose-900/60 text-rose-200 border border-rose-500/30 font-mono">
-                    {lastExecutedValue.actionTag}
-                  </span>
-                </div>
-                <div className="text-[11px] text-slate-300 line-clamp-1 mt-0.5">
-                  <span className="text-emerald-300 font-bold">{lastExecutedValue.actionLabel}</span>
-                  <span className="text-slate-400 mx-1.5">•</span>
-                  <span>{isAr ? lastExecutedValue.strategicOutcomeAr : lastExecutedValue.strategicOutcomeEn}</span>
-                </div>
-              </div>
+            <div className="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shrink-0 mt-0.5">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
             </div>
-
-            {/* Instant Value Metrics Badges */}
-            <div className="flex items-center gap-2 font-mono shrink-0 w-full md:w-auto justify-end">
-              <div className="px-2.5 py-1 rounded-lg bg-white/10 border border-white/15 text-center">
-                <span className="text-[9px] text-slate-300 block font-sans">{isAr ? 'وفر أسبوعي' : 'Weekly Capacity'}</span>
-                <span className="font-black text-cyan-300 text-xs">+{lastExecutedValue.weeklyHoursFreed}h/wk</span>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between gap-1">
+                <span className="text-[9.5px] uppercase tracking-wider font-bold text-[#FFB800]">
+                  {isAr ? 'تم تطبيق القرار بنجاح' : 'Decision Applied'}
+                </span>
+                <button 
+                  onClick={() => setLastExecutedValue(null)} 
+                  className="text-slate-400 hover:text-white font-bold p-0.5 cursor-pointer text-xs leading-none"
+                >
+                  ✕
+                </button>
               </div>
-              <div className="px-2.5 py-1 rounded-lg bg-emerald-950/80 border border-emerald-400/40 text-center">
-                <span className="text-[9px] text-slate-300 block font-sans">{isAr ? 'وفر سنوي' : 'Annual Time'}</span>
-                <span className="font-black text-emerald-400 text-xs">+{lastExecutedValue.hoursSaved}h/yr</span>
+              <div className="text-[11px] font-bold text-white truncate mt-0.5">
+                {lastExecutedValue.title}
               </div>
-              <div className="px-2.5 py-1 rounded-lg bg-[#9A1B38]/70 border border-rose-400/40 text-center">
-                <span className="text-[9px] text-slate-200 block font-sans">{isAr ? 'الوفر المالي' : 'ROI Value'}</span>
-                <span className="font-black text-[#FFB800] text-xs">+{lastExecutedValue.costSavedKWD.toLocaleString()} KWD</span>
+              <div className="text-[10px] text-slate-300 line-clamp-1 mt-0.5">
+                <span className="text-emerald-300 font-bold">{lastExecutedValue.actionLabel}: </span>
+                <span>{isAr ? lastExecutedValue.strategicOutcomeAr : lastExecutedValue.strategicOutcomeEn}</span>
               </div>
-              <div className="px-2.5 py-1 rounded-lg bg-white/10 border border-white/15 text-center hidden lg:block">
-                <span className="text-[9px] text-emerald-300 block font-sans">{isAr ? 'مضاعف السرعة' : 'Velocity'}</span>
-                <span className="font-black text-white text-xs">{lastExecutedValue.velocityBoost}</span>
+              
+              {/* Compact Metrics Chips */}
+              <div className="flex items-center gap-1.5 mt-1.5 pt-1.5 border-t border-white/10 text-[9px] font-mono">
+                <span className="px-1.5 py-0.5 rounded bg-emerald-950/80 text-emerald-300 font-bold border border-emerald-500/30">
+                  +{lastExecutedValue.hoursSaved}h/yr
+                </span>
+                <span className="px-1.5 py-0.5 rounded bg-amber-950/80 text-[#FFB800] font-bold border border-amber-500/30">
+                  +{lastExecutedValue.costSavedKWD.toLocaleString()} KD
+                </span>
+                <span className="px-1.5 py-0.5 rounded bg-blue-950/80 text-cyan-300 font-bold border border-cyan-500/30">
+                  {lastExecutedValue.velocityBoost}
+                </span>
               </div>
-              <button 
-                onClick={() => setLastExecutedValue(null)} 
-                className="text-slate-400 hover:text-white font-bold p-1 cursor-pointer text-xs shrink-0"
-              >
-                ✕
-              </button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* MAIN SINGLE-SCREEN SPLIT BODY */}
+      {/* MOBILE SEGMENTED TABS (Visible only on screens < lg) */}
+      <div className="lg:hidden shrink-0 flex items-center p-1 rounded-xl bg-slate-200/90 border border-slate-300 shadow-xs font-bold text-xs">
+        <button
+          onClick={() => setMobileTab('list')}
+          className={`flex-1 py-2 px-2.5 rounded-lg transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+            mobileTab === 'list'
+              ? 'bg-[#0A1931] text-white shadow-xs'
+              : 'text-slate-700 hover:text-slate-900'
+          }`}
+        >
+          <BarChart3 className="w-3.5 h-3.5 text-[#FFB800]" />
+          <span>{isAr ? 'قائمة الاجتماعات والرسم' : 'Meetings List & Chart'}</span>
+        </button>
+        <button
+          onClick={() => setMobileTab('diagnostic')}
+          className={`flex-1 py-2 px-2.5 rounded-lg transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+            mobileTab === 'diagnostic'
+              ? 'bg-[#8B263E] text-white shadow-xs'
+              : 'text-slate-700 hover:text-slate-900'
+          }`}
+        >
+          <Zap className="w-3.5 h-3.5 text-[#FFB800]" />
+          <span>{isAr ? 'توصيات الذكاء الاصطناعي' : 'AI Decision Console'}</span>
+          {selectedMeeting && (
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          )}
+        </button>
+      </div>
+
+      {/* MAIN SPLIT BODY (Single Screen on Desktop, Tabbed / Responsive on Mobile) */}
       <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-2.5 overflow-y-auto lg:overflow-hidden">
         
         {/* LEFT COLUMN (7 Cols): Dynamic Chart (Top) + Clean Meeting Directory (Bottom) */}
-        <div className="lg:col-span-7 flex flex-col h-auto lg:h-full gap-2 min-h-0">
+        <div className={`lg:col-span-7 flex-col h-auto lg:h-full gap-2 min-h-0 ${
+          mobileTab === 'list' ? 'flex' : 'hidden lg:flex'
+        }`}>
           
           {/* Top Panel: Dynamic Chart Card */}
           <div className="shrink-0 p-3 rounded-2xl bg-gradient-to-b from-white via-white to-slate-50 border border-slate-200/90 shadow-sm flex flex-col justify-between h-[180px] sm:h-[175px] relative overflow-hidden">
@@ -747,9 +777,14 @@ export const DemoOneView: React.FC<DemoOneViewProps> = ({ idea, lang }) => {
                 return (
                   <motion.div
                     key={meeting.id}
-                    onClick={() => setSelectedMeeting(meeting)}
+                    onClick={() => {
+                      setSelectedMeeting(meeting);
+                      if (window.innerWidth < 1024) {
+                        setMobileTab('diagnostic');
+                      }
+                    }}
                     whileHover={{ scale: 1.005 }}
-                    className={`p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-2.5 ${
+                    className={`p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-2.5 min-h-[50px] ${
                       isSelected
                         ? 'border-[#FFB800] bg-amber-50/40 ring-2 ring-[#FFB800] shadow-md'
                         : 'border-slate-100 bg-slate-50/80 hover:bg-white hover:border-slate-200'
@@ -803,9 +838,25 @@ export const DemoOneView: React.FC<DemoOneViewProps> = ({ idea, lang }) => {
         </div>
 
         {/* RIGHT COLUMN (5 Cols): AI Diagnostic & Action Console */}
-        <div className="lg:col-span-5 flex flex-col h-auto lg:h-full min-h-[360px] lg:min-h-0 bg-gradient-to-br from-[#0A1931] via-[#10223f] to-[#1a1c36] text-white rounded-2xl p-3 border border-slate-700/80 shadow-lg overflow-hidden relative">
+        <div className={`lg:col-span-5 flex-col h-auto lg:h-full min-h-[360px] lg:min-h-0 bg-gradient-to-br from-[#0A1931] via-[#10223f] to-[#1a1c36] text-white rounded-2xl p-3 border border-slate-700/80 shadow-lg overflow-hidden relative ${
+          mobileTab === 'diagnostic' ? 'flex' : 'hidden lg:flex'
+        }`}>
           
           <div className="absolute top-0 right-0 w-28 h-28 bg-[#FFB800]/5 rounded-full blur-xl pointer-events-none" />
+
+          {/* Mobile Back to List Button (visible on mobile only) */}
+          <div className="lg:hidden shrink-0 pb-2 mb-1 border-b border-white/10 flex items-center justify-between">
+            <button
+              onClick={() => setMobileTab('list')}
+              className="px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+            >
+              {isAr ? <ArrowRight className="w-3.5 h-3.5" /> : <ArrowLeft className="w-3.5 h-3.5" />}
+              <span>{isAr ? 'العودة لقائمة الاجتماعات' : 'Back to Meetings'}</span>
+            </button>
+            <span className="text-[10px] font-mono text-emerald-400">
+              {isAr ? 'التشخيص المباشر' : 'Live Diagnosis'}
+            </span>
+          </div>
 
           {selectedMeeting ? (
             <div className="flex flex-col h-full min-h-0 overflow-hidden relative z-10">
