@@ -317,21 +317,21 @@ export const DemoOneView: React.FC<DemoOneViewProps> = ({ idea, lang }) => {
   };
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col h-full gap-2 font-sans overflow-hidden">
+    <div className="flex-1 min-h-0 flex flex-col h-full gap-2 font-sans overflow-y-auto lg:overflow-hidden">
       
       {/* TOP EXECUTIVE CIO BAR: CLEAR STRATEGIC OBJECTIVE & 3 KEY PILLARS */}
-      <div className="shrink-0 p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-[#0A1931] via-[#121B2F] to-[#0A1931] text-white border border-slate-700/80 shadow-md flex flex-col xl:flex-row items-center justify-between gap-3 relative overflow-hidden">
+      <div className="shrink-0 p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-[#0A1931] via-[#121B2F] to-[#0A1931] text-white border border-slate-700/80 shadow-md flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-2.5 sm:gap-3 relative overflow-hidden">
         
         <div className="absolute -right-6 -top-6 w-28 h-28 bg-[#FFB800]/10 rounded-full blur-2xl pointer-events-none" />
         <div className="absolute -left-6 -bottom-6 w-28 h-28 bg-[#8B263E]/20 rounded-full blur-2xl pointer-events-none" />
 
         {/* Title & Clear Objective */}
-        <div className="flex items-center gap-3 relative z-10 w-full xl:w-auto">
+        <div className="flex items-center gap-2.5 sm:gap-3 relative z-10 w-full xl:w-auto">
           <div className="p-2 rounded-xl bg-gradient-to-br from-[#8B263E] to-[#6E1226] text-white shrink-0 shadow-sm border border-white/10">
             <Rocket className="w-4 h-4 text-[#FFB800]" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <span className="px-2 py-0.5 rounded-md bg-[#8B263E] text-white text-[9px] font-black uppercase tracking-wider">
                 {isAr ? 'المبادرة #01' : 'Initiative #01'}
               </span>
@@ -339,45 +339,45 @@ export const DemoOneView: React.FC<DemoOneViewProps> = ({ idea, lang }) => {
                 {isAr ? 'ديتوكس الاجتماعات وتسريع دورة اتخاذ القرار' : 'AI Meeting Detox & Decision Velocity'}
               </h2>
             </div>
-            <p className="text-[11px] text-slate-300 mt-0.5 flex items-center gap-1.5 font-medium">
-              <span className="text-[#FFB800] font-bold">★ {isAr ? 'الهدف المباشر:' : 'Direct Objective:'}</span>
-              <span>{isAr ? 'تحرير 2,400+ ساعة عمل سنوية للمهندسين وتحويل الاجتماعات المعطلة إلى قرارات فورية.' : 'Free 2,400+ dev hours annually & turn sync overhead into 1-click async decisions.'}</span>
+            <p className="text-[10px] sm:text-[11px] text-slate-300 mt-0.5 flex items-center gap-1.5 font-medium">
+              <span className="text-[#FFB800] font-bold shrink-0">★ {isAr ? 'الهدف المباشر:' : 'Direct Objective:'}</span>
+              <span className="line-clamp-2 sm:line-clamp-1">{isAr ? 'تحرير 2,400+ ساعة عمل سنوية للمهندسين وتحويل الاجتماعات المعطلة إلى قرارات فورية.' : 'Free 2,400+ dev hours annually & turn sync overhead into 1-click async decisions.'}</span>
             </p>
           </div>
         </div>
 
         {/* The 3 Core Executive Figures (Current -> Expected -> Net Saved ROI) */}
-        <div className="flex items-center gap-2 font-mono text-xs relative z-10 w-full xl:w-auto justify-end">
+        <div className="grid grid-cols-3 sm:flex sm:items-center gap-1.5 sm:gap-2 font-mono text-xs relative z-10 w-full xl:w-auto justify-end">
           
           {/* Current State */}
-          <div className="px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-600 text-center min-w-[110px]">
-            <span className="text-[8px] font-bold uppercase tracking-wider text-slate-400 font-sans block mb-0.5">
+          <div className="px-2 sm:px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-600 text-center">
+            <span className="text-[7.5px] sm:text-[8px] font-bold uppercase tracking-wider text-slate-400 font-sans block mb-0.5 truncate">
               {isAr ? 'الوضع الحالي' : 'CURRENT'}
             </span>
-            <div className="text-xs font-black text-white">
-              {totalOriginalHours.toLocaleString()} <span className="text-[9px] text-slate-400 font-sans">hrs/yr</span>
+            <div className="text-[11px] sm:text-xs font-black text-white truncate">
+              {totalOriginalHours.toLocaleString()} <span className="text-[8px] sm:text-[9px] text-slate-400 font-sans">hrs</span>
             </div>
           </div>
 
-          <div className="text-[#FFB800] font-bold px-0.5">➔</div>
+          <div className="hidden sm:block text-[#FFB800] font-bold px-0.5">➔</div>
 
           {/* Expected State */}
-          <div className="px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-600 text-center min-w-[125px]">
-            <span className="text-[8px] font-bold uppercase tracking-wider text-emerald-400 font-sans block mb-0.5">
+          <div className="px-2 sm:px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-600 text-center">
+            <span className="text-[7.5px] sm:text-[8px] font-bold uppercase tracking-wider text-emerald-400 font-sans block mb-0.5 truncate">
               {isAr ? 'المتوقع بعد AI' : 'EXPECTED'}
             </span>
-            <div className="text-xs font-black text-emerald-300">
-              {currentTotalHours.toLocaleString()} <span className="text-[9px] font-sans">hrs (-{currentSavingsPercent}%)</span>
+            <div className="text-[11px] sm:text-xs font-black text-emerald-300 truncate">
+              {currentTotalHours.toLocaleString()} <span className="text-[8px] sm:text-[9px] font-sans">(-{currentSavingsPercent}%)</span>
             </div>
           </div>
 
           {/* Net Realized ROI Gold Pillar */}
-          <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#8B263E] to-[#0A1931] border border-[#FFB800]/50 text-center min-w-[135px] shadow-sm">
-            <span className="text-[8px] font-black uppercase tracking-wider text-[#FFB800] font-sans block mb-0.5">
-              {isAr ? 'الوفر المالي السنوي' : 'NET SAVINGS ROI'}
+          <div className="px-2 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#8B263E] to-[#0A1931] border border-[#FFB800]/50 text-center shadow-sm">
+            <span className="text-[7.5px] sm:text-[8px] font-black uppercase tracking-wider text-[#FFB800] font-sans block mb-0.5 truncate">
+              {isAr ? 'الوفر المالي' : 'NET SAVINGS'}
             </span>
-            <div className="text-xs font-black text-[#FFB800]">
-              +{calculatedSavingsKWD.toLocaleString()} <span className="text-[9px] font-sans text-amber-200">KD/yr</span>
+            <div className="text-[11px] sm:text-xs font-black text-[#FFB800] truncate">
+              +{calculatedSavingsKWD.toLocaleString()} <span className="text-[8px] sm:text-[9px] font-sans text-amber-200">KD</span>
             </div>
           </div>
 
@@ -446,13 +446,13 @@ export const DemoOneView: React.FC<DemoOneViewProps> = ({ idea, lang }) => {
       </AnimatePresence>
 
       {/* MAIN SINGLE-SCREEN SPLIT BODY */}
-      <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-2.5 overflow-hidden">
+      <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-2.5 overflow-y-auto lg:overflow-hidden">
         
         {/* LEFT COLUMN (7 Cols): Dynamic Chart (Top) + Clean Meeting Directory (Bottom) */}
-        <div className="lg:col-span-7 flex flex-col h-full gap-2 min-h-0 overflow-hidden">
+        <div className="lg:col-span-7 flex flex-col h-auto lg:h-full gap-2 min-h-0">
           
           {/* Top Panel: Dynamic Chart Card */}
-          <div className="shrink-0 p-3 rounded-2xl bg-gradient-to-b from-white via-white to-slate-50 border border-slate-200/90 shadow-sm flex flex-col justify-between h-[175px] relative overflow-hidden">
+          <div className="shrink-0 p-3 rounded-2xl bg-gradient-to-b from-white via-white to-slate-50 border border-slate-200/90 shadow-sm flex flex-col justify-between h-[180px] sm:h-[175px] relative overflow-hidden">
             <div className="flex items-center justify-between pb-1 border-b border-slate-100">
               <div className="flex items-center gap-2 min-w-0">
                 <div className="p-1 rounded-lg bg-[#9A1B38]/10 text-[#9A1B38] shrink-0">
@@ -803,7 +803,7 @@ export const DemoOneView: React.FC<DemoOneViewProps> = ({ idea, lang }) => {
         </div>
 
         {/* RIGHT COLUMN (5 Cols): AI Diagnostic & Action Console */}
-        <div className="lg:col-span-5 flex flex-col h-full min-h-0 bg-gradient-to-br from-[#0A1931] via-[#10223f] to-[#1a1c36] text-white rounded-2xl p-3 border border-slate-700/80 shadow-lg overflow-hidden relative">
+        <div className="lg:col-span-5 flex flex-col h-auto lg:h-full min-h-[360px] lg:min-h-0 bg-gradient-to-br from-[#0A1931] via-[#10223f] to-[#1a1c36] text-white rounded-2xl p-3 border border-slate-700/80 shadow-lg overflow-hidden relative">
           
           <div className="absolute top-0 right-0 w-28 h-28 bg-[#FFB800]/5 rounded-full blur-xl pointer-events-none" />
 

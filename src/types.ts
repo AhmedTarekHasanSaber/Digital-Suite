@@ -68,6 +68,18 @@ export interface KnowledgeGapItem {
   recommendedActionAr: string;
   priority: 'High' | 'Medium' | 'Low';
   status: 'Open' | 'In Progress' | 'Resolved';
+  teamEn?: string;
+  teamAr?: string;
+  expertNameEn?: string;
+  expertNameAr?: string;
+  assignedJiraTaskKey?: string;
+  createdArticleTitleEn?: string;
+  createdArticleTitleAr?: string;
+  createdArticleSpace?: string;
+  articleContentSnippetEn?: string;
+  articleContentSnippetAr?: string;
+  impactEn?: string;
+  impactAr?: string;
 }
 
 export interface EarlyWarningItem {

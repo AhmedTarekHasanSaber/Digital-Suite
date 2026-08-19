@@ -215,19 +215,19 @@ export const DemoThreeView: React.FC<DemoThreeViewProps> = ({ idea, lang }) => {
   }, [isAr, sensitivityThreshold, warnings]);
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col h-full gap-2 font-sans overflow-hidden">
+    <div className="flex-1 min-h-0 flex flex-col h-full gap-2 font-sans overflow-y-auto lg:overflow-hidden">
       
       {/* TOP EXECUTIVE CIO BAR: CLEAR STRATEGIC OBJECTIVE & 3 KEY PILLARS */}
-      <div className="shrink-0 p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-[#0A1931] via-[#092E22] to-[#0A1931] text-white border border-slate-700/80 shadow-md flex flex-col xl:flex-row items-center justify-between gap-3 relative overflow-hidden">
+      <div className="shrink-0 p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-[#0A1931] via-[#092E22] to-[#0A1931] text-white border border-slate-700/80 shadow-md flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-2.5 sm:gap-3 relative overflow-hidden">
         <div className="absolute -right-6 -top-6 w-28 h-28 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none" />
 
         {/* Title & Clear Strategic Objective */}
-        <div className="flex items-center gap-3 relative z-10 w-full xl:w-auto">
+        <div className="flex items-center gap-2.5 sm:gap-3 relative z-10 w-full xl:w-auto">
           <div className="p-2 rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-800 text-white shrink-0 shadow-sm border border-white/10">
             <ShieldCheck className="w-4 h-4 text-[#FFB800]" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <span className="px-2 py-0.5 rounded-md bg-emerald-700 text-white text-[9px] font-black uppercase tracking-wider">
                 {isAr ? 'المبادرة #03' : 'Initiative #03'}
               </span>
@@ -235,45 +235,45 @@ export const DemoThreeView: React.FC<DemoThreeViewProps> = ({ idea, lang }) => {
                 {isAr ? 'رادار الإنذار المبكر وحماية موثوقية الأنظمة' : 'AI Early Warning Radar & Risk Shield'}
               </h2>
             </div>
-            <p className="text-[11px] text-slate-300 mt-0.5 flex items-center gap-1.5 font-medium">
-              <span className="text-[#FFB800] font-bold">★ {isAr ? 'الهدف المباشر:' : 'Direct Objective:'}</span>
-              <span>{isAr ? 'الكشف الاستباقي عن تعثر إطلاق الخدمات وحماية 140,000+ دينار من مخاطر التوقف.' : 'Proactively detect release friction & protect 140k+ KWD from production downtime.'}</span>
+            <p className="text-[10px] sm:text-[11px] text-slate-300 mt-0.5 flex items-center gap-1.5 font-medium">
+              <span className="text-[#FFB800] font-bold shrink-0">★ {isAr ? 'الهدف المباشر:' : 'Direct Objective:'}</span>
+              <span className="line-clamp-2 sm:line-clamp-1">{isAr ? 'الكشف الاستباقي عن تعثر إطلاق الخدمات وحماية 140,000+ دينار من مخاطر التوقف.' : 'Proactively detect release friction & protect 140k+ KWD from production downtime.'}</span>
             </p>
           </div>
         </div>
 
         {/* 3 Core Executive Figures (Current -> Expected -> Net Saved ROI) */}
-        <div className="flex items-center gap-2 font-mono text-xs relative z-10 w-full xl:w-auto justify-end">
+        <div className="grid grid-cols-3 sm:flex sm:items-center gap-1.5 sm:gap-2 font-mono text-xs relative z-10 w-full xl:w-auto justify-end">
           
           {/* Current State */}
-          <div className="px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-600 text-center min-w-[110px]">
-            <span className="text-[8px] font-bold uppercase tracking-wider text-slate-400 font-sans block mb-0.5">
+          <div className="px-2 sm:px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-600 text-center">
+            <span className="text-[7.5px] sm:text-[8px] font-bold uppercase tracking-wider text-slate-400 font-sans block mb-0.5 truncate">
               {isAr ? 'الوضع الحالي' : 'CURRENT'}
             </span>
-            <div className="text-xs font-black text-white">
-              280 <span className="text-[9px] text-slate-400 font-sans">mins MTTR</span>
+            <div className="text-[11px] sm:text-xs font-black text-white truncate">
+              280 <span className="text-[8px] sm:text-[9px] text-slate-400 font-sans">mins</span>
             </div>
           </div>
 
-          <div className="text-[#FFB800] font-bold px-0.5">➔</div>
+          <div className="hidden sm:block text-[#FFB800] font-bold px-0.5">➔</div>
 
           {/* Expected State */}
-          <div className="px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-600 text-center min-w-[125px]">
-            <span className="text-[8px] font-bold uppercase tracking-wider text-emerald-400 font-sans block mb-0.5">
+          <div className="px-2 sm:px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-600 text-center">
+            <span className="text-[7.5px] sm:text-[8px] font-bold uppercase tracking-wider text-emerald-400 font-sans block mb-0.5 truncate">
               {isAr ? 'المتوقع بعد AI' : 'EXPECTED'}
             </span>
-            <div className="text-xs font-black text-emerald-300">
-              6 <span className="text-[9px] font-sans">mins (-97%)</span>
+            <div className="text-[11px] sm:text-xs font-black text-emerald-300 truncate">
+              6 <span className="text-[8px] sm:text-[9px] font-sans">mins (-97%)</span>
             </div>
           </div>
 
           {/* Net Realized ROI Gold Pillar */}
-          <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-900 to-[#0A1931] border border-emerald-400/50 text-center min-w-[135px] shadow-sm">
-            <span className="text-[8px] font-black uppercase tracking-wider text-[#FFB800] font-sans block mb-0.5">
+          <div className="px-2 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-900 to-[#0A1931] border border-emerald-400/50 text-center shadow-sm">
+            <span className="text-[7.5px] sm:text-[8px] font-black uppercase tracking-wider text-[#FFB800] font-sans block mb-0.5 truncate">
               {isAr ? 'القيمة المحمية' : 'PROTECTED ROI'}
             </span>
-            <div className="text-xs font-black text-[#FFB800]">
-              +{(totalProtectedKwd > 0 ? totalProtectedKwd : 188500).toLocaleString()} <span className="text-[9px] font-sans text-amber-200">KD/yr</span>
+            <div className="text-[11px] sm:text-xs font-black text-[#FFB800] truncate">
+              +{(totalProtectedKwd > 0 ? totalProtectedKwd : 188500).toLocaleString()} <span className="text-[8px] sm:text-[9px] font-sans text-amber-200">KD</span>
             </div>
           </div>
 
@@ -339,13 +339,13 @@ export const DemoThreeView: React.FC<DemoThreeViewProps> = ({ idea, lang }) => {
       </AnimatePresence>
 
       {/* MAIN SINGLE-SCREEN SPLIT BODY */}
-      <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-2.5 overflow-hidden">
+      <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-2.5 overflow-y-auto lg:overflow-hidden">
         
         {/* LEFT COLUMN (6 Cols): MTTR Chart + Diagnostic */}
-        <div className="lg:col-span-6 flex flex-col h-full gap-2 min-h-0 overflow-hidden">
+        <div className="lg:col-span-6 flex flex-col h-auto lg:h-full gap-2 min-h-0">
           
           {/* Top Panel: MTTR Chart */}
-          <div className="shrink-0 p-3 rounded-2xl bg-gradient-to-b from-white via-white to-slate-50 border border-slate-200/90 shadow-sm flex flex-col justify-between h-[175px] relative overflow-hidden">
+          <div className="shrink-0 p-3 rounded-2xl bg-gradient-to-b from-white via-white to-slate-50 border border-slate-200/90 shadow-sm flex flex-col justify-between h-[180px] sm:h-[175px] relative overflow-hidden">
             <div className="flex items-center justify-between pb-1 border-b border-slate-100">
               <div className="flex items-center gap-2 min-w-0">
                 <div className="p-1 rounded-lg bg-emerald-100 text-emerald-700 shrink-0">
@@ -533,7 +533,7 @@ export const DemoThreeView: React.FC<DemoThreeViewProps> = ({ idea, lang }) => {
         </div>
 
         {/* RIGHT COLUMN (6 Cols): Active Alerts Feed */}
-        <div className="lg:col-span-6 flex flex-col h-full min-h-0 bg-white rounded-2xl p-3 border border-slate-200/90 shadow-sm overflow-hidden">
+        <div className="lg:col-span-6 flex flex-col h-auto lg:h-full min-h-[360px] lg:min-h-0 bg-white rounded-2xl p-3 border border-slate-200/90 shadow-sm overflow-hidden">
           
           <div className="shrink-0 flex items-center justify-between pb-1.5 border-b border-slate-100 gap-2">
             <span className="text-xs font-bold text-[#0A1931]">

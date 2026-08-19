@@ -106,19 +106,19 @@ export const ThreeBigButtonsGrid: React.FC<ThreeBigButtonsGridProps> = ({
   };
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col justify-between h-full font-sans gap-2.5 max-w-7xl mx-auto w-full overflow-hidden">
+    <div className="flex-1 min-h-0 flex flex-col justify-between h-auto lg:h-full font-sans gap-2.5 max-w-7xl mx-auto w-full overflow-y-auto lg:overflow-hidden">
       
       {/* Top Lively Header Bar */}
-      <div className="shrink-0 flex items-center justify-between pb-2 border-b border-slate-200/80 gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-gradient-to-r from-[#9A1B38]/15 via-[#9A1B38]/5 to-transparent border border-[#9A1B38]/20 text-[#9A1B38] font-bold text-xs shadow-xs">
+      <div className="shrink-0 flex flex-col sm:flex-row sm:items-center justify-between pb-2 border-b border-slate-200/80 gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-2.5">
+          <div className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-xl bg-gradient-to-r from-[#9A1B38]/15 via-[#9A1B38]/5 to-transparent border border-[#9A1B38]/20 text-[#9A1B38] font-bold text-xs shadow-xs shrink-0">
             <Building2 className="w-4 h-4" />
             <span>{isAr ? 'بنك بوبيان' : 'Boubyan Bank'}</span>
           </div>
 
-          <h1 className="text-base sm:text-lg font-bold text-[#0A1931] tracking-tight font-serif flex items-center gap-2">
-            <span>{isAr ? 'المبادرات الرقمية الثلاث للذكاء الاصطناعي' : 'Three Strategic AI Initiatives'}</span>
-            <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-sans font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 animate-pulse">
+          <h1 className="text-sm sm:text-base lg:text-lg font-bold text-[#0A1931] tracking-tight font-serif flex items-center gap-2 truncate">
+            <span className="truncate">{isAr ? 'المبادرات الرقمية الثلاث للذكاء الاصطناعي' : 'Three Strategic AI Initiatives'}</span>
+            <span className="hidden md:inline-flex items-center gap-1 text-[11px] font-sans font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 animate-pulse">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
               <span>{isAr ? 'محاكي تفاعلي فوري' : 'Live Interactive Simulators'}</span>
             </span>
@@ -126,8 +126,8 @@ export const ThreeBigButtonsGrid: React.FC<ThreeBigButtonsGridProps> = ({
         </div>
 
         {/* Global Live Ticker Stats */}
-        <div className="flex items-center gap-2">
-          <div className="px-3 py-1 rounded-xl bg-white border border-slate-200/80 shadow-xs flex items-center gap-2">
+        <div className="flex items-center gap-2 justify-end">
+          <div className="px-2.5 sm:px-3 py-1 rounded-xl bg-white border border-slate-200/80 shadow-xs flex items-center gap-2">
             <Flame className="w-3.5 h-3.5 text-[#FFB800]" />
             <div className="text-end">
               <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider block">{isAr ? 'الوفر الإجمالي' : 'Total ROI'}</span>
@@ -135,7 +135,7 @@ export const ThreeBigButtonsGrid: React.FC<ThreeBigButtonsGridProps> = ({
             </div>
           </div>
 
-          <div className="px-3 py-1 rounded-xl bg-white border border-slate-200/80 shadow-xs hidden sm:flex items-center gap-2">
+          <div className="px-2.5 sm:px-3 py-1 rounded-xl bg-white border border-slate-200/80 shadow-xs hidden sm:flex items-center gap-2">
             <Activity className="w-3.5 h-3.5 text-emerald-500" />
             <div className="text-end">
               <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider block">{isAr ? 'وتيرة الإنجاز' : 'Velocity'}</span>
@@ -146,7 +146,7 @@ export const ThreeBigButtonsGrid: React.FC<ThreeBigButtonsGridProps> = ({
       </div>
 
       {/* 3 INTERACTIVE, VIBRANT, ANIMATED INITIATIVE CARDS */}
-      <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 overflow-hidden items-stretch">
+      <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 overflow-y-auto lg:overflow-hidden items-stretch">
         {ideas.map((idea, index) => {
           const theme = getThemeDetails(index);
           const numberLabel = isAr ? `مبادرة #0${idea.number}` : `Initiative #0${idea.number}`;

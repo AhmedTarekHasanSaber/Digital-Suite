@@ -52,7 +52,7 @@ export default function App() {
   const activeIdeaTitle = activeIdea ? (lang === 'ar' ? activeIdea.titleAr : activeIdea.titleEn) : undefined;
 
   return (
-    <div className="h-screen max-h-screen overflow-hidden bg-[#F4F7FA] text-slate-900 flex flex-col font-sans selection:bg-[#FFB800] selection:text-[#0A1931]">
+    <div className="min-h-screen lg:h-screen lg:max-h-screen overflow-y-auto lg:overflow-hidden bg-[#F4F7FA] text-slate-900 flex flex-col font-sans selection:bg-[#FFB800] selection:text-[#0A1931]">
       
       {/* Top Executive Header (Compact Fixed Bar) */}
       <ExecutiveHeader
@@ -65,8 +65,8 @@ export default function App() {
         activeDemoTitle={activeIdeaTitle}
       />
 
-      {/* Main Content Area - Strictly Single Screen (No Page Scroll) */}
-      <main className="flex-1 min-h-0 w-full max-w-[1600px] mx-auto px-3 sm:px-5 py-2.5 flex flex-col overflow-hidden">
+      {/* Main Content Area - Responsive Scroll on Mobile, Single Screen on Desktop */}
+      <main className="flex-1 min-h-0 w-full max-w-[1600px] mx-auto px-2.5 sm:px-4 lg:px-5 py-2 sm:py-2.5 flex flex-col overflow-y-auto lg:overflow-hidden">
         
         {/* VIEW 1: HOME PAGE WITH 3 BIG BUTTONS */}
         {activeDemoId === null && (

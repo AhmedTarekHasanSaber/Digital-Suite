@@ -25,27 +25,27 @@ export const ExecutiveHeader: React.FC<ExecutiveHeaderProps> = ({
   const isAr = lang === 'ar';
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white border-b border-slate-200 shadow-sm font-sans">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between">
+    <header className="sticky top-0 z-40 w-full bg-white border-b border-slate-200 shadow-xs font-sans">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 flex items-center justify-between gap-2">
         
         {/* Left Side: Boubyan Official Logo Mark & Status */}
-        <div className="flex items-center gap-4 sm:gap-6">
+        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
           {activeDemoId ? (
             <button
               onClick={onBackToHome}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold transition-all group cursor-pointer border border-slate-200"
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-all group cursor-pointer border border-slate-200 active:scale-95"
             >
               {isAr ? <ArrowRight className="w-4 h-4 text-[#8B263E]" /> : <ArrowLeft className="w-4 h-4 text-[#8B263E]" />}
-              <span>{isAr ? 'العودة للرئيسية' : 'Back to Home'}</span>
+              <span className="hidden xs:inline">{isAr ? 'الرئيسية' : 'Home'}</span>
             </button>
           ) : (
-            <div className="flex items-center gap-4 cursor-pointer group" onClick={onBackToHome}>
+            <div className="flex items-center gap-2 sm:gap-3 cursor-pointer group" onClick={onBackToHome}>
               {/* Exact Bank Boubyan Official SVG Logo */}
               <div className="flex items-center transition-transform group-hover:scale-102">
-                <BoubyanOfficialLogo className="h-10 sm:h-11 w-auto" textColor="#0A1931" />
+                <BoubyanOfficialLogo className="h-8 sm:h-10 w-auto" textColor="#0A1931" />
               </div>
 
-              <div className="h-7 w-[1px] bg-slate-200 hidden sm:block"></div>
+              <div className="h-6 w-[1px] bg-slate-200 hidden sm:block"></div>
 
               <div className="hidden sm:block">
                 <span className="text-xs font-bold text-[#0A1931] tracking-tight block">
@@ -60,45 +60,45 @@ export const ExecutiveHeader: React.FC<ExecutiveHeaderProps> = ({
           )}
 
           {activeDemoId && activeDemoTitle && (
-            <div className="hidden md:flex items-center gap-2 text-xs text-slate-600 border-l border-slate-200 pl-4">
+            <div className="hidden md:flex items-center gap-2 text-xs text-slate-600 border-l border-slate-200 pl-3">
               <span className="w-2 h-2 rounded-full bg-[#8B263E] animate-pulse"></span>
-              <span className="font-bold text-[#0A1931] truncate max-w-sm">{activeDemoTitle}</span>
+              <span className="font-bold text-[#0A1931] truncate max-w-xs">{activeDemoTitle}</span>
             </div>
           )}
         </div>
 
         {/* Right Side: Functional Executive Actions */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
           {/* Customize Ideas - Hidden in app #1 */}
           {activeDemoId !== 'idea-1' && (
             <button
               onClick={onOpenCustomize}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-all cursor-pointer active:scale-95"
               title={isAr ? 'تخصيص الأفكار' : 'Customize Ideas'}
             >
               <Edit3 className="w-3.5 h-3.5 text-[#8B263E]" />
-              <span className="hidden sm:inline">{isAr ? 'تخصيص الأفكار' : 'Customize'}</span>
+              <span className="hidden md:inline">{isAr ? 'تخصيص' : 'Customize'}</span>
             </button>
           )}
 
           {/* Presentation Deck Modal Button */}
           <button
             onClick={onOpenPresentation}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold text-white bg-[#8B263E] hover:bg-[#721f33] transition-all shadow-sm cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold text-white bg-[#8B263E] hover:bg-[#721f33] transition-all shadow-xs cursor-pointer active:scale-95"
             title={isAr ? 'عرض المبادرات' : 'Executive Deck'}
           >
             <Presentation className="w-3.5 h-3.5 text-[#FFB800]" />
-            <span>{isAr ? 'عرض المبادرات' : 'Executive Deck'}</span>
+            <span className="text-[11px] sm:text-xs">{isAr ? 'عرض المبادرات' : 'Executive Deck'}</span>
           </button>
 
           {/* Language Toggle */}
           <button
             onClick={onToggleLang}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer active:scale-95"
             title="Toggle Language"
           >
             <Globe className="w-3.5 h-3.5 text-[#8B263E]" />
-            <span>{isAr ? 'English' : 'عربي'}</span>
+            <span className="text-[11px] sm:text-xs">{isAr ? 'English' : 'عربي'}</span>
           </button>
         </div>
 
