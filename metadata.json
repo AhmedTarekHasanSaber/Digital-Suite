@@ -1,0 +1,6 @@
+{
+  "name": "Digital Suite",
+  "description": "Interactive executive demo suite featuring 3 high-impact enterprise AI and digital transformation solutions for Boubyan Bank.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
