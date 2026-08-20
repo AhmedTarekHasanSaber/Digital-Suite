@@ -47,6 +47,8 @@ import {
   Area
 } from 'recharts';
 import { motion, AnimatePresence } from 'motion/react';
+import { useExecutiveMetrics } from '../context/ExecutiveMetricsContext';
+import { AppEmblemIcon } from './AppEmblemIcons';
 
 interface DemoThreeViewProps {
   idea: DemoIdea;
@@ -69,8 +71,24 @@ interface LastExecutedRiskValue {
 
 export const DemoThreeView: React.FC<DemoThreeViewProps> = ({ idea, lang }) => {
   const isAr = lang === 'ar';
-  const [warnings, setWarnings] = useState<EarlyWarningItem[]>(INITIAL_EARLY_WARNINGS);
-  const [selectedWarning, setSelectedWarning] = useState<EarlyWarningItem | null>(INITIAL_EARLY_WARNINGS[0]);
+  const { mitigatedWarnings, applyWarningMitigation, removeWarningMitigation } = useExecutiveMetrics();
+
+  const [warnings, setWarnings] = useState<EarlyWarningItem[]>(() => {
+    return INITIAL_EARLY_WARNINGS.map(w => {
+      if (mitigatedWarnings[w.id]) {
+        return { ...w, status: 'Mitigated' as const };
+      }
+      return w;
+    });
+  });
+
+  const [selectedWarning, setSelectedWarning] = useState<EarlyWarningItem | null>(() => {
+    const first = INITIAL_EARLY_WARNINGS[0];
+    if (mitigatedWarnings[first.id]) {
+      return { ...first, status: 'Mitigated' as const };
+    }
+    return first;
+  });
   const [categoryFilter, setCategoryFilter] = useState<'all' | 'incident_risk' | 'delivery_risk'>('all');
   const [activeDiagnosticTab, setActiveDiagnosticTab] = useState<'whatChanged' | 'signals' | 'historical' | 'impact' | 'action'>('whatChanged');
   const [chartVisualType, setChartVisualType] = useState<'spline' | 'bars'>('spline');
@@ -115,6 +133,7 @@ export const DemoThreeView: React.FC<DemoThreeViewProps> = ({ idea, lang }) => {
 
     if (isCurrentlyMitigated) {
       // Toggle back to Investigating
+      removeWarningMitigation(warningId);
       setWarnings(prev => prev.map(w => w.id === warningId ? { ...w, status: 'Investigating' } : w));
       if (selectedWarning?.id === warningId) {
         setSelectedWarning(prev => prev ? { ...prev, status: 'Investigating' } : prev);
@@ -125,6 +144,19 @@ export const DemoThreeView: React.FC<DemoThreeViewProps> = ({ idea, lang }) => {
 
     const metrics = getMetricsForWarning(target);
     const costUSD = Math.round(metrics.costKWD * 3.26);
+    const downtimeHoursSaved = Math.round(metrics.downtime / 60 * 12); // Extrapolated annual outage avoidance
+
+    // Dispatch to global context
+    applyWarningMitigation(warningId, {
+      warningId,
+      titleEn: target.titleEn,
+      titleAr: target.titleAr,
+      category: target.category,
+      downtimeMinutesSaved: metrics.downtime,
+      kwdProtected: metrics.costKWD,
+      usdProtected: costUSD,
+      hoursSaved: downtimeHoursSaved
+    });
 
     setWarnings(prev => prev.map(w => {
       if (w.id === warningId) return { ...w, status: 'Mitigated' };
@@ -279,14 +311,12 @@ export const DemoThreeView: React.FC<DemoThreeViewProps> = ({ idea, lang }) => {
     <div className="flex-1 min-h-0 flex flex-col h-full gap-2 font-sans overflow-y-auto lg:overflow-hidden">
       
       {/* TOP EXECUTIVE CIO BAR: CORE PHILOSOPHY & GOLDEN FORMULA */}
-      <div className="shrink-0 p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-[#0A1931] via-[#08281E] to-[#0A1931] text-white border border-slate-700/80 shadow-md flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-2.5 sm:gap-3 relative overflow-hidden">
+      <div className="shrink-0 p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-[#0A1931] via-[#08281E] to-[#0A1931] text-white border border-slate-700/80 shadow-md flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-2.5 sm:gap-3 relative overflow-hidden min-h-[66px]">
         <div className="absolute -right-6 -top-6 w-32 h-32 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none" />
 
         {/* Title & The Golden Formula Banner */}
         <div className="flex items-center gap-2.5 sm:gap-3 relative z-10 w-full xl:w-auto">
-          <div className="p-2 rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-800 text-white shrink-0 shadow-sm border border-white/10">
-            <ShieldAlert className="w-4 h-4 text-[#FFB800]" />
-          </div>
+          <AppEmblemIcon type="early-warning" size="md" />
           <div>
             <div className="flex items-center gap-1.5 sm:gap-2">
               <span className="px-2 py-0.5 rounded-md bg-emerald-700 text-white text-[9px] font-black uppercase tracking-wider">

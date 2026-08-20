@@ -687,38 +687,38 @@ export const INITIAL_EARLY_WARNINGS: EarlyWarningItem[] = [
 
 export const DEMO_IDEAS: DemoIdea[] = [
   {
-    id: 'idea-1',
+    id: 'idea-3',
     number: 1,
-    titleEn: 'AI Meeting Detox — Accelerating Decision Velocity',
-    titleAr: 'ديتوكس الاجتماعات الذكي لتسريع سرعة اتخاذ القرار',
-    subtitleEn: 'Eliminate Status Syncs • Generate Decision-Ready Packs • Boost Execution Speed',
-    subtitleAr: 'إلغاء التحديثات المكررة • توليد حزم اتخاذ القرار الجاهزة • رفع سرعة الإنجاز',
-    badgeEn: 'Executive Time & Speed',
-    badgeAr: 'كفاءة الوقت وسرعة التنفيذ',
-    icon: 'CalendarCheck',
-    gradient: 'from-[#8B263E] to-[#0A1931]',
-    borderGlow: 'hover:border-[#8B263E]',
-    accentColor: '#8B263E',
-    executiveValueEn: 'Transforms passive meeting hours into active engineering execution by replacing status syncs with AI-synthesized Decision-Ready Packs.',
-    executiveValueAr: 'تحويل ساعات الاجتماعات المهدرة إلى وقت إنجاز وتنفيذ فعلي عبر استبدال التحديثات الروتينية بحزم قرارات جاهزة وموثقة.',
-    roiEstimateEn: '40–50% Reduction in Recurring Meeting Overhead (~18,000 engineering hours saved annually across digital squads)',
-    roiEstimateAr: 'خفض بنسبة 40-50% في وقت الاجتماعات المتكررة (~18,000 ساعة هندسية سنوياً عبر الفرق الرقمية)',
-    implementationTimeEn: '4–6 Weeks (Calendar & Jira Integration)',
-    implementationTimeAr: '4 إلى 6 أسابيع (ربط مباشر مع التقويم و Jira)',
+    titleEn: 'AI Early Warning System — Protecting Execution Speed',
+    titleAr: 'نظام الإنذار المبكر الذكي — حماية سرعة التنفيذ',
+    subtitleEn: 'Early Signal → Early Action → Less Impact / Delay • Jira Pattern Intelligence',
+    subtitleAr: 'إشارة مبكرة ➔ تحقيق مبكر ➔ تدخل مبكر ➔ خفض الأثر والتأخير • ذكاء أنماط Jira',
+    badgeEn: 'Execution & Reliability',
+    badgeAr: 'الموثوقية وحماية سرعة الإنجاز',
+    icon: 'Radar',
+    gradient: 'from-[#0A1931] to-[#10B981]',
+    borderGlow: 'hover:border-[#10B981]',
+    accentColor: '#10B981',
+    executiveValueEn: 'Analyzes combined Jira signals (TTs, SLAs, reassignments, recurring defects, overdue dependencies) to discover emerging incidents and delivery slowdowns before impact.',
+    executiveValueAr: 'ربط إشارات Jira المتعددة (تذاكر الدعم، الـ SLAs، تنقل المهام، تكرار الأخطاء، والاعتماديات العالقة) لكشف الحوادث وتعثر التسليم قبل فوات الأوان.',
+    roiEstimateEn: '60% Reduction in Production Incidents & 4.5 Days Lead Time Before SLA / Delivery Breaches',
+    roiEstimateAr: 'خفض 60% في الحوادث التشغيلية وكشف مسبق بـ 4.5 أيام قبل كسر الـ SLA وتأخر المشاريع',
+    implementationTimeEn: '6–8 Weeks (Jira Telemetry, Status History & Predictive Stream)',
+    implementationTimeAr: '6 إلى 8 أسابيع (ربط سجلات Jira ومؤشرات التدفق التشغيلي)',
     talkingPointsEn: [
-      'Identifies meetings that exist solely to share status and replaces them with automated async digests.',
-      'Synthesizes prior Jira epics, Confluence RFCs, and past board decisions into structured 1-page Decision Packs.',
-      'Empowers executives to approve, reject, or comment with full historical context in under 60 seconds.'
+      'Identifies multi-signal patterns (TT volume spike + MTTR drift + reassignments) rather than isolated metrics.',
+      'Extends beyond outages to detect delivery risks: overdue dependencies, rework surge, and pending decisions.',
+      'Answers the 5 critical questions: What changed? Contributing signals? Past pattern? Blast radius? Action needed?'
     ],
     talkingPointsAr: [
-      'كشف الاجتماعات المخصصة لمشاركة الحالة فقط واستبدالها بملخصات تفاعلية غير متزامنة.',
-      'دمج قرارات Jira ووثائق Confluence السابقة في حزم قرارات موجزة وجاهزة للاعتماد في صفحة واحدة.',
-      'تمكين الإدارة من اتخاذ القرار أو التوجيه في أقل من 60 ثانية مع كامل السياق التاريخي.'
+      'ربط الإشارات المشتركة (ارتفاع تذاكر الدعم + استطالة المعالجة + تنقل المهام) بدلاً من قراءة المؤشرات منعزلة.',
+      'تغطية مخاطر الإنجاز والتسليم: الاعتماديات المتأخرة، تزايد التعديلات (Rework)، والقرارات المعمارية العالقة.',
+      'الإجابة بوضوح على الأسئلة الخمسة: إيه اللي اتغير؟ إيه الإشارات؟ هل حصل قبل كده؟ إيه اللي هيتأثر؟ وإيه اللي محتاج مراجعة؟'
     ],
     keyMetrics: [
-      { labelEn: 'Annual Hours Saved', labelAr: 'الساعات السنوية الموفرة', value: '18,500 h', trend: '+45%', isPositive: true },
-      { labelEn: 'Decision Velocity', labelAr: 'سرعة اتخاذ القرار', value: '3.8x', trend: 'Faster', isPositive: true },
-      { labelEn: 'Redundant Syncs Cut', labelAr: 'الاجتماعات المكررة الملغاة', value: '62%', trend: '-62%', isPositive: true }
+      { labelEn: 'Early-Warning Lead Time', labelAr: 'زمن الكشف المسبق', value: '4.5 Days', trend: 'Ahead', isPositive: true },
+      { labelEn: 'Detection Accuracy', labelAr: 'دقة رصد الأنماط', value: '96.4%', trend: 'High Precision', isPositive: true },
+      { labelEn: 'SLA & Delay Prevented', labelAr: 'حماية الـ SLA والتسليم', value: '-78%', trend: 'Less Delay', isPositive: true }
     ]
   },
   {
@@ -757,38 +757,38 @@ export const DEMO_IDEAS: DemoIdea[] = [
     ]
   },
   {
-    id: 'idea-3',
+    id: 'idea-1',
     number: 3,
-    titleEn: 'AI Early Warning System — Protecting Execution Speed',
-    titleAr: 'نظام الإنذار المبكر الذكي — حماية سرعة التنفيذ',
-    subtitleEn: 'Early Signal → Early Action → Less Impact / Delay • Jira Pattern Intelligence',
-    subtitleAr: 'إشارة مبكرة ➔ تحقيق مبكر ➔ تدخل مبكر ➔ خفض الأثر والتأخير • ذكاء أنماط Jira',
-    badgeEn: 'Execution & Reliability',
-    badgeAr: 'الموثوقية وحماية سرعة الإنجاز',
-    icon: 'Radar',
-    gradient: 'from-[#0A1931] to-[#10B981]',
-    borderGlow: 'hover:border-[#10B981]',
-    accentColor: '#10B981',
-    executiveValueEn: 'Analyzes combined Jira signals (TTs, SLAs, reassignments, recurring defects, overdue dependencies) to discover emerging incidents and delivery slowdowns before impact.',
-    executiveValueAr: 'ربط إشارات Jira المتعددة (تذاكر الدعم، الـ SLAs، تنقل المهام، تكرار الأخطاء، والاعتماديات العالقة) لكشف الحوادث وتعثر التسليم قبل فوات الأوان.',
-    roiEstimateEn: '60% Reduction in Production Incidents & 4.5 Days Lead Time Before SLA / Delivery Breaches',
-    roiEstimateAr: 'خفض 60% في الحوادث التشغيلية وكشف مسبق بـ 4.5 أيام قبل كسر الـ SLA وتأخر المشاريع',
-    implementationTimeEn: '6–8 Weeks (Jira Telemetry, Status History & Predictive Stream)',
-    implementationTimeAr: '6 إلى 8 أسابيع (ربط سجلات Jira ومؤشرات التدفق التشغيلي)',
+    titleEn: 'AI Meeting Detox — Accelerating Decision Velocity',
+    titleAr: 'ديتوكس الاجتماعات الذكي لتسريع سرعة اتخاذ القرار',
+    subtitleEn: 'Eliminate Status Syncs • Generate Decision-Ready Packs • Boost Execution Speed',
+    subtitleAr: 'إلغاء التحديثات المكررة • توليد حزم اتخاذ القرار الجاهزة • رفع سرعة الإنجاز',
+    badgeEn: 'Executive Time & Speed',
+    badgeAr: 'كفاءة الوقت وسرعة التنفيذ',
+    icon: 'CalendarCheck',
+    gradient: 'from-[#8B263E] to-[#0A1931]',
+    borderGlow: 'hover:border-[#8B263E]',
+    accentColor: '#8B263E',
+    executiveValueEn: 'Transforms passive meeting hours into active engineering execution by replacing status syncs with AI-synthesized Decision-Ready Packs.',
+    executiveValueAr: 'تحويل ساعات الاجتماعات المهدرة إلى وقت إنجاز وتنفيذ فعلي عبر استبدال التحديثات الروتينية بحزم قرارات جاهزة وموثقة.',
+    roiEstimateEn: '40–50% Reduction in Recurring Meeting Overhead (~18,000 engineering hours saved annually across digital squads)',
+    roiEstimateAr: 'خفض بنسبة 40-50% في وقت الاجتماعات المتكررة (~18,000 ساعة هندسية سنوياً عبر الفرق الرقمية)',
+    implementationTimeEn: '4–6 Weeks (Calendar & Jira Integration)',
+    implementationTimeAr: '4 إلى 6 أسابيع (ربط مباشر مع التقويم و Jira)',
     talkingPointsEn: [
-      'Identifies multi-signal patterns (TT volume spike + MTTR drift + reassignments) rather than isolated metrics.',
-      'Extends beyond outages to detect delivery risks: overdue dependencies, rework surge, and pending decisions.',
-      'Answers the 5 critical questions: What changed? Contributing signals? Past pattern? Blast radius? Action needed?'
+      'Identifies meetings that exist solely to share status and replaces them with automated async digests.',
+      'Synthesizes prior Jira epics, Confluence RFCs, and past board decisions into structured 1-page Decision Packs.',
+      'Empowers executives to approve, reject, or comment with full historical context in under 60 seconds.'
     ],
     talkingPointsAr: [
-      'ربط الإشارات المشتركة (ارتفاع تذاكر الدعم + استطالة المعالجة + تنقل المهام) بدلاً من قراءة المؤشرات منعزلة.',
-      'تغطية مخاطر الإنجاز والتسليم: الاعتماديات المتأخرة، تزايد التعديلات (Rework)، والقرارات المعمارية العالقة.',
-      'الإجابة بوضوح على الأسئلة الخمسة: إيه اللي اتغير؟ إيه الإشارات؟ هل حصل قبل كده؟ إيه اللي هيتأثر؟ وإيه اللي محتاج مراجعة؟'
+      'كشف الاجتماعات المخصصة لمشاركة الحالة فقط واستبدالها بملخصات تفاعلية غير متزامنة.',
+      'دمج قرارات Jira ووثائق Confluence السابقة في حزم قرارات موجزة وجاهزة للاعتماد في صفحة واحدة.',
+      'تمكين الإدارة من اتخاذ القرار أو التوجيه في أقل من 60 ثانية مع كامل السياق التاريخي.'
     ],
     keyMetrics: [
-      { labelEn: 'Early-Warning Lead Time', labelAr: 'زمن الكشف المسبق', value: '4.5 Days', trend: 'Ahead', isPositive: true },
-      { labelEn: 'Detection Accuracy', labelAr: 'دقة رصد الأنماط', value: '96.4%', trend: 'High Precision', isPositive: true },
-      { labelEn: 'SLA & Delay Prevented', labelAr: 'حماية الـ SLA والتسليم', value: '-78%', trend: 'Less Delay', isPositive: true }
+      { labelEn: 'Annual Hours Saved', labelAr: 'الساعات السنوية الموفرة', value: '18,500 h', trend: '+45%', isPositive: true },
+      { labelEn: 'Decision Velocity', labelAr: 'سرعة اتخاذ القرار', value: '3.8x', trend: 'Faster', isPositive: true },
+      { labelEn: 'Redundant Syncs Cut', labelAr: 'الاجتماعات المكررة الملغاة', value: '62%', trend: '-62%', isPositive: true }
     ]
   }
 ];

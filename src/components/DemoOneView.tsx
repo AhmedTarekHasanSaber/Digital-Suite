@@ -39,6 +39,8 @@ import {
   Area 
 } from 'recharts';
 import { motion, AnimatePresence } from 'motion/react';
+import { useExecutiveMetrics } from '../context/ExecutiveMetricsContext';
+import { AppEmblemIcon } from './AppEmblemIcons';
 
 interface DemoOneViewProps {
   idea: DemoIdea;
@@ -63,8 +65,47 @@ interface LastExecutedValue {
 
 export const DemoOneView: React.FC<DemoOneViewProps> = ({ idea, lang }) => {
   const isAr = lang === 'ar';
-  const [meetings, setMeetings] = useState<MeetingItem[]>(BOUBYAN_MEETING_ITEMS);
-  const [selectedMeeting, setSelectedMeeting] = useState<MeetingItem | null>(BOUBYAN_MEETING_ITEMS[0]);
+  const { appliedMeetingDecisions, applyMeetingDecision, removeMeetingDecision } = useExecutiveMetrics();
+
+  // Initialize meetings with any persisted applied decisions
+  const [meetings, setMeetings] = useState<MeetingItem[]>(() => {
+    return BOUBYAN_MEETING_ITEMS.map(m => {
+      const persisted = appliedMeetingDecisions[m.id];
+      if (persisted) {
+        return {
+          ...m,
+          statusTypeEn: 'Optimized',
+          statusTypeAr: 'تم التحسين',
+          redundancyScore: Math.round(m.redundancyScore * (1 - persisted.reductionPct / 100)),
+          appliedDecisionEn: persisted.labelEn,
+          appliedDecisionAr: persisted.labelAr,
+          appliedReductionPct: persisted.reductionPct,
+          summaryEn: `Decision applied: "${persisted.labelEn}".`,
+          summaryAr: `تم تطبيق: "${persisted.labelAr}".`
+        };
+      }
+      return m;
+    });
+  });
+
+  const [selectedMeeting, setSelectedMeeting] = useState<MeetingItem | null>(() => {
+    const first = BOUBYAN_MEETING_ITEMS[0];
+    const persisted = appliedMeetingDecisions[first.id];
+    if (persisted) {
+      return {
+        ...first,
+        statusTypeEn: 'Optimized',
+        statusTypeAr: 'تم التحسين',
+        redundancyScore: Math.round(first.redundancyScore * (1 - persisted.reductionPct / 100)),
+        appliedDecisionEn: persisted.labelEn,
+        appliedDecisionAr: persisted.labelAr,
+        appliedReductionPct: persisted.reductionPct,
+        summaryEn: `Decision applied: "${persisted.labelEn}".`,
+        summaryAr: `تم تطبيق: "${persisted.labelAr}".`
+      };
+    }
+    return first;
+  });
   const [issueFilter, setIssueFilter] = useState<string>('all');
   
   const [chartVisualType, setChartVisualType] = useState<'spline' | 'bars'>('spline');
@@ -128,6 +169,8 @@ export const DemoOneView: React.FC<DemoOneViewProps> = ({ idea, lang }) => {
 
     if (isCurrentlyApplied) {
       // Toggle off / reset back to un-optimized baseline
+      removeMeetingDecision(meetingId);
+
       setMeetings(prev => prev.map(m => {
         if (m.id === meetingId) {
           const original = BOUBYAN_MEETING_ITEMS.find(o => o.id === meetingId);
@@ -167,6 +210,18 @@ export const DemoOneView: React.FC<DemoOneViewProps> = ({ idea, lang }) => {
     const velocityMultiplier = `+${(1 + (rec.reductionPct / 40)).toFixed(1)}x`;
     const attendees = targetMeeting?.attendeesCount || 10;
     const outcomes = getStrategicOutcome(rec.iconType, rec.reductionPct, attendees);
+
+    // Dispatch to global context
+    applyMeetingDecision(meetingId, {
+      meetingId,
+      recId: rec.id,
+      labelEn: rec.labelEn,
+      labelAr: rec.labelAr,
+      reductionPct: rec.reductionPct,
+      hoursSaved,
+      kwdSaved: costSavedKWD,
+      usdSaved: costSavedUSD
+    });
 
     setMeetings(prev => prev.map(m => {
       if (m.id === meetingId) {
@@ -330,16 +385,14 @@ export const DemoOneView: React.FC<DemoOneViewProps> = ({ idea, lang }) => {
     <div className="flex-1 min-h-0 flex flex-col h-full gap-2 font-sans overflow-y-auto lg:overflow-hidden">
       
       {/* TOP EXECUTIVE CIO BAR: CLEAR STRATEGIC OBJECTIVE & 3 KEY PILLARS */}
-      <div className="shrink-0 p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-[#0A1931] via-[#121B2F] to-[#0A1931] text-white border border-slate-700/80 shadow-md flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-2.5 sm:gap-3 relative overflow-hidden">
+      <div className="shrink-0 p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-[#0A1931] via-[#121B2F] to-[#0A1931] text-white border border-slate-700/80 shadow-md flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-2.5 sm:gap-3 relative overflow-hidden min-h-[66px]">
         
         <div className="absolute -right-6 -top-6 w-28 h-28 bg-[#FFB800]/10 rounded-full blur-2xl pointer-events-none" />
         <div className="absolute -left-6 -bottom-6 w-28 h-28 bg-[#8B263E]/20 rounded-full blur-2xl pointer-events-none" />
 
         {/* Title & Clear Objective */}
         <div className="flex items-center gap-2.5 sm:gap-3 relative z-10 w-full xl:w-auto">
-          <div className="p-2 rounded-xl bg-gradient-to-br from-[#8B263E] to-[#6E1226] text-white shrink-0 shadow-sm border border-white/10">
-            <Rocket className="w-4 h-4 text-[#FFB800]" />
-          </div>
+          <AppEmblemIcon type="meeting-detox" size="md" />
           <div>
             <div className="flex items-center gap-1.5 sm:gap-2">
               <span className="px-2 py-0.5 rounded-md bg-[#8B263E] text-white text-[9px] font-black uppercase tracking-wider">
@@ -838,22 +891,22 @@ export const DemoOneView: React.FC<DemoOneViewProps> = ({ idea, lang }) => {
         </div>
 
         {/* RIGHT COLUMN (5 Cols): AI Diagnostic & Action Console */}
-        <div className={`lg:col-span-5 flex-col h-auto lg:h-full min-h-[360px] lg:min-h-0 bg-gradient-to-br from-[#0A1931] via-[#10223f] to-[#1a1c36] text-white rounded-2xl p-3 border border-slate-700/80 shadow-lg overflow-hidden relative ${
+        <div className={`lg:col-span-5 flex-col h-auto lg:h-full min-h-[360px] lg:min-h-0 bg-white text-slate-800 rounded-2xl p-3 border border-slate-200/90 shadow-sm overflow-hidden relative ${
           mobileTab === 'diagnostic' ? 'flex' : 'hidden lg:flex'
         }`}>
           
-          <div className="absolute top-0 right-0 w-28 h-28 bg-[#FFB800]/5 rounded-full blur-xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-28 h-28 bg-[#8B263E]/5 rounded-full blur-xl pointer-events-none" />
 
           {/* Mobile Back to List Button (visible on mobile only) */}
-          <div className="lg:hidden shrink-0 pb-2 mb-1 border-b border-white/10 flex items-center justify-between">
+          <div className="lg:hidden shrink-0 pb-2 mb-1 border-b border-slate-100 flex items-center justify-between">
             <button
               onClick={() => setMobileTab('list')}
-              className="px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+              className="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
             >
               {isAr ? <ArrowRight className="w-3.5 h-3.5" /> : <ArrowLeft className="w-3.5 h-3.5" />}
               <span>{isAr ? 'العودة لقائمة الاجتماعات' : 'Back to Meetings'}</span>
             </button>
-            <span className="text-[10px] font-mono text-emerald-400">
+            <span className="text-[10px] font-mono font-bold text-emerald-700">
               {isAr ? 'التشخيص المباشر' : 'Live Diagnosis'}
             </span>
           </div>
@@ -862,33 +915,33 @@ export const DemoOneView: React.FC<DemoOneViewProps> = ({ idea, lang }) => {
             <div className="flex flex-col h-full min-h-0 overflow-hidden relative z-10">
               
               {/* Meeting Header */}
-              <div className="shrink-0 pb-2 border-b border-white/10">
+              <div className="shrink-0 pb-2 border-b border-slate-100">
                 <div className="flex items-center justify-between gap-2 mb-1">
-                  <span className="px-2 py-0.5 rounded-md bg-[#9A1B38] text-white text-[10px] font-black uppercase">
+                  <span className="px-2 py-0.5 rounded-md bg-[#8B263E] text-white text-[10px] font-black uppercase">
                     {isAr ? selectedMeeting.departmentAr : selectedMeeting.departmentEn}
                   </span>
-                  <div className="flex items-center gap-2 text-[10px] font-mono text-slate-300">
+                  <div className="flex items-center gap-2 text-[10px] font-mono text-slate-600 font-bold">
                     <span>{selectedMeeting.durationMinutes}m</span>
-                    <span className="text-[#FFB800] font-black">{selectedMeeting.annualPersonHours}h/yr</span>
+                    <span className="text-[#8B263E] font-black">{selectedMeeting.annualPersonHours}h/yr</span>
                   </div>
                 </div>
 
-                <h3 className="text-xs sm:text-sm font-bold text-white font-serif leading-snug">
+                <h3 className="text-xs sm:text-sm font-bold text-[#0A1931] font-sans leading-snug">
                   {isAr ? selectedMeeting.titleAr : selectedMeeting.titleEn}
                 </h3>
               </div>
 
               {/* Attendee Quorum Summary */}
-              <div className="shrink-0 py-2 border-b border-white/10 space-y-1">
+              <div className="shrink-0 py-2 border-b border-slate-100 space-y-1">
                 {selectedMeeting.attendeeBreakdown && (
                   <div className="grid grid-cols-2 gap-1.5 text-[10px]">
-                    <div className="p-1.5 rounded-lg bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 flex items-center justify-between">
+                    <div className="p-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center justify-between">
                       <span className="font-semibold">{isAr ? 'صناع القرار:' : 'Deciders:'}</span>
-                      <span className="font-black font-mono text-xs text-white">{selectedMeeting.attendeeBreakdown.coreDeciders}</span>
+                      <span className="font-black font-mono text-xs text-emerald-950">{selectedMeeting.attendeeBreakdown.coreDeciders}</span>
                     </div>
-                    <div className="p-1.5 rounded-lg bg-rose-950/60 border border-rose-500/30 text-rose-300 flex items-center justify-between">
+                    <div className="p-1.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 flex items-center justify-between">
                       <span className="font-semibold">{isAr ? 'مستمعين:' : 'Observers:'}</span>
-                      <span className="font-black font-mono text-xs text-white">{selectedMeeting.attendeeBreakdown.passiveListeners}</span>
+                      <span className="font-black font-mono text-xs text-rose-950">{selectedMeeting.attendeeBreakdown.passiveListeners}</span>
                     </div>
                   </div>
                 )}
@@ -897,11 +950,11 @@ export const DemoOneView: React.FC<DemoOneViewProps> = ({ idea, lang }) => {
               {/* Action Playbooks */}
               <div className="flex-1 min-h-0 flex flex-col overflow-hidden pt-1.5">
                 <div className="shrink-0 flex items-center justify-between mb-1">
-                  <span className="text-[10px] font-bold text-emerald-300 uppercase tracking-wider flex items-center gap-1">
-                    <Sparkles className="w-3 h-3 text-[#FFB800]" />
-                    <span>{isAr ? 'توصيات القرار (مرتبة من الأكثر وفراً للأقل)' : 'Decision Playbooks (Highest Savings First)'}</span>
+                  <span className="text-[10px] font-bold text-[#0A1931] uppercase tracking-wider flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-[#8B263E]" />
+                    <span>{isAr ? 'توصيات القرار (مرتبة حسب الوفر)' : 'Decision Playbooks (Highest ROI)'}</span>
                   </span>
-                  <span className="text-[9px] font-mono text-[#FFB800] bg-white/10 px-1.5 py-0.2 rounded">
+                  <span className="text-[9px] font-mono font-bold text-[#8B263E] bg-rose-50 border border-rose-100 px-1.5 py-0.2 rounded">
                     {isAr ? 'ترتيب تنازلي حسب الوفر' : 'Sorted by ROI'}
                   </span>
                 </div>
@@ -917,41 +970,41 @@ export const DemoOneView: React.FC<DemoOneViewProps> = ({ idea, lang }) => {
                     return (
                       <motion.div
                         key={rec.id}
-                        whileHover={{ scale: 1.01 }}
-                        className={`p-2 rounded-xl border transition-all relative ${
+                        whileHover={{ scale: 1.005 }}
+                        className={`p-2.5 rounded-xl border transition-all relative ${
                           isApplied
-                            ? 'bg-emerald-950/80 border-emerald-500 ring-1 ring-emerald-500 shadow-md'
+                            ? 'bg-emerald-50/90 border-emerald-400 ring-1 ring-emerald-400 shadow-sm'
                             : isTopSaver 
-                              ? 'bg-gradient-to-r from-amber-950/40 via-white/5 to-white/5 border-[#FFB800]/50 hover:bg-white/10 shadow-sm'
-                              : 'bg-white/5 border-white/10 hover:bg-white/10'
+                              ? 'bg-gradient-to-r from-amber-50/70 via-white to-white border-amber-300/90 hover:border-amber-400 shadow-xs'
+                              : 'bg-slate-50/90 border-slate-200/90 hover:bg-white hover:border-slate-300'
                         }`}
                       >
                         <div className="flex items-center justify-between gap-2 mb-0.5">
                           <div className="flex items-center gap-1.5 min-w-0">
-                            <div className="p-1 rounded-md bg-white/10 shrink-0">
+                            <div className="p-1 rounded-md bg-white border border-slate-200 shrink-0 text-[#8B263E]">
                               {getRecommendationIcon(rec.iconType)}
                             </div>
-                            <span className="text-xs font-bold text-white truncate">
+                            <span className="text-xs font-bold text-[#0A1931] truncate">
                               {isAr ? rec.labelAr : rec.labelEn}
                             </span>
                             {isTopSaver && (
-                              <span className="text-[8px] font-black px-1.5 py-0.2 rounded bg-gradient-to-r from-[#FFB800] to-amber-500 text-[#0A1931] shrink-0 font-sans shadow-xs flex items-center gap-0.5">
+                              <span className="text-[8px] font-black px-1.5 py-0.2 rounded bg-amber-100 text-amber-900 border border-amber-200 shrink-0 font-sans shadow-xs flex items-center gap-0.5">
                                 <span>★</span>
                                 <span>{isAr ? 'الخيار الأفضل' : '#1 Best Saver'}</span>
                               </span>
                             )}
                           </div>
-                          <span className="text-[10px] font-mono font-bold text-[#FFB800] shrink-0">
+                          <span className="text-[10px] font-mono font-bold text-[#8B263E] shrink-0">
                             -{rec.reductionPct}% ({hoursSaved}h | {kwdSaved.toLocaleString()} KD)
                           </span>
                         </div>
 
-                        <p className="text-[10px] text-slate-300 line-clamp-1 mb-1.5">
+                        <p className="text-[10.5px] text-slate-600 line-clamp-1 mb-1.5">
                           {isAr ? rec.descriptionAr : rec.descriptionEn}
                         </p>
 
-                        <div className="flex items-center justify-between pt-1 border-t border-white/10">
-                          <span className="text-[9px] text-[#FFB800] font-semibold">
+                        <div className="flex items-center justify-between pt-1.5 border-t border-slate-200/70">
+                          <span className="text-[9.5px] text-[#8B263E] font-bold">
                             {isAr ? rec.tagAr : rec.tagEn}
                           </span>
 
@@ -961,8 +1014,8 @@ export const DemoOneView: React.FC<DemoOneViewProps> = ({ idea, lang }) => {
                               isApplied
                                 ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
                                 : isTopSaver
-                                  ? 'bg-gradient-to-r from-[#FFB800] via-amber-400 to-[#FFB800] text-[#0A1931] hover:brightness-105 font-black'
-                                  : 'bg-gradient-to-r from-white via-slate-100 to-white text-[#0A1931] hover:bg-[#FFB800] hover:text-[#0A1931]'
+                                  ? 'bg-gradient-to-r from-[#8B263E] to-[#0A1931] text-white hover:opacity-95 font-bold'
+                                  : 'bg-[#0A1931] hover:bg-slate-800 text-white'
                             }`}
                           >
                             {isApplied ? (
@@ -972,7 +1025,7 @@ export const DemoOneView: React.FC<DemoOneViewProps> = ({ idea, lang }) => {
                               </>
                             ) : (
                               <>
-                                <Zap className="w-3 h-3 text-[#9A1B38]" />
+                                <Zap className="w-3 h-3 text-[#FFB800]" />
                                 <span>{isAr ? 'تطبيق وتحديث الرسم' : 'Execute & Update'}</span>
                               </>
                             )}

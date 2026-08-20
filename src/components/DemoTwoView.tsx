@@ -40,6 +40,8 @@ import {
   Area
 } from 'recharts';
 import { motion, AnimatePresence } from 'motion/react';
+import { useExecutiveMetrics } from '../context/ExecutiveMetricsContext';
+import { AppEmblemIcon } from './AppEmblemIcons';
 
 interface DemoTwoViewProps {
   idea: DemoIdea;
@@ -64,8 +66,24 @@ interface LastExecutedGapValue {
 
 export const DemoTwoView: React.FC<DemoTwoViewProps> = ({ idea, lang }) => {
   const isAr = lang === 'ar';
-  const [gaps, setGaps] = useState<KnowledgeGapItem[]>(INITIAL_KNOWLEDGE_GAPS);
-  const [selectedGap, setSelectedGap] = useState<KnowledgeGapItem | null>(INITIAL_KNOWLEDGE_GAPS[0]);
+  const { resolvedKnowledgeGaps, resolveKnowledgeGap, unresolveKnowledgeGap } = useExecutiveMetrics();
+
+  const [gaps, setGaps] = useState<KnowledgeGapItem[]>(() => {
+    return INITIAL_KNOWLEDGE_GAPS.map(g => {
+      if (resolvedKnowledgeGaps[g.id]) {
+        return { ...g, status: 'Resolved' as const };
+      }
+      return g;
+    });
+  });
+
+  const [selectedGap, setSelectedGap] = useState<KnowledgeGapItem | null>(() => {
+    const first = INITIAL_KNOWLEDGE_GAPS[0];
+    if (resolvedKnowledgeGaps[first.id]) {
+      return { ...first, status: 'Resolved' as const };
+    }
+    return first;
+  });
   const [sourceFilter, setSourceFilter] = useState<string>('all');
   const [chartVisualType, setChartVisualType] = useState<'spline' | 'bars'>('spline');
   const [mobileTab, setMobileTab] = useState<'radar' | 'engine'>('radar');
@@ -172,6 +190,7 @@ export const DemoTwoView: React.FC<DemoTwoViewProps> = ({ idea, lang }) => {
 
     if (isCurrentlyResolved) {
       // Toggle back to Open
+      unresolveKnowledgeGap(gapId);
       setGaps(prev => prev.map(g => g.id === gapId ? { ...g, status: 'Open' } : g));
       setSelectedGap(prev => prev?.id === gapId ? { ...prev, status: 'Open' } : prev);
       setLastExecutedValue(null);
@@ -179,6 +198,18 @@ export const DemoTwoView: React.FC<DemoTwoViewProps> = ({ idea, lang }) => {
     }
 
     const metrics = getGapMetrics(gapId);
+    const annualHoursSaved = Math.round(metrics.hoursWeekly * 52);
+    const annualUsdSaved = Math.round(metrics.annualKwd * 3.26);
+
+    // Dispatch to global context
+    resolveKnowledgeGap(gapId, {
+      gapId,
+      titleEn: targetGap?.topicEn || 'Knowledge Runbook SOP',
+      titleAr: targetGap?.topicAr || 'دليل تشغيل معتمد',
+      hoursSaved: annualHoursSaved,
+      kwdSaved: metrics.annualKwd,
+      usdSaved: annualUsdSaved
+    });
 
     setGaps(prev => prev.map(g => {
       if (g.id === gapId) return { ...g, status: 'Resolved' };
@@ -260,14 +291,12 @@ export const DemoTwoView: React.FC<DemoTwoViewProps> = ({ idea, lang }) => {
     <div className="flex-1 min-h-0 flex flex-col h-full gap-2 font-sans overflow-y-auto lg:overflow-hidden">
       
       {/* TOP EXECUTIVE CIO BAR: CLEAR STRATEGIC OBJECTIVE & 3 KEY PILLARS */}
-      <div className="shrink-0 p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-[#0A1931] via-[#0E2A4A] to-[#0A1931] text-white border border-slate-700/80 shadow-md flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-2.5 sm:gap-3 relative overflow-hidden">
+      <div className="shrink-0 p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-[#0A1931] via-[#0E2A4A] to-[#0A1931] text-white border border-slate-700/80 shadow-md flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-2.5 sm:gap-3 relative overflow-hidden min-h-[66px]">
         <div className="absolute -right-6 -top-6 w-28 h-28 bg-[#0284C7]/20 rounded-full blur-2xl pointer-events-none" />
 
         {/* Title & Clear Strategic Objective */}
         <div className="flex items-center gap-2.5 sm:gap-3 relative z-10 w-full xl:w-auto">
-          <div className="p-2 rounded-xl bg-gradient-to-br from-[#0284C7] to-[#0369A1] text-white shrink-0 shadow-sm border border-white/10">
-            <Sparkles className="w-4 h-4 text-[#FFB800]" />
-          </div>
+          <AppEmblemIcon type="knowledge-intelligence" size="md" />
           <div>
             <div className="flex items-center gap-1.5 sm:gap-2">
               <span className="px-2 py-0.5 rounded-md bg-[#0284C7] text-white text-[9px] font-black uppercase tracking-wider">

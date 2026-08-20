@@ -32,6 +32,13 @@ import {
   Tooltip,
   CartesianGrid
 } from 'recharts';
+import { 
+  useExecutiveMetrics, 
+  AppliedMeetingDecision, 
+  ResolvedKnowledgeGap, 
+  MitigatedWarningItem 
+} from '../context/ExecutiveMetricsContext';
+import { AppEmblemIcon } from './AppEmblemIcons';
 
 interface PresentationModalProps {
   isOpen: boolean;
@@ -102,6 +109,19 @@ export const PresentationModal: React.FC<PresentationModalProps> = ({
   if (!isOpen) return null;
 
   const isAr = lang === 'ar';
+  const { 
+    appliedMeetingDecisions, 
+    resolvedKnowledgeGaps, 
+    mitigatedWarnings,
+    totalHoursSaved,
+    totalUsdSaved,
+    totalKwdSaved,
+    liveAdditionalHours,
+    liveAdditionalUsd,
+    liveAdditionalKwd,
+    activeDecisionsCount
+  } = useExecutiveMetrics();
+
   const [currentSlide, setCurrentSlide] = useState(0);
 
   // Chart Interactive Filters on Slide 0
@@ -114,9 +134,92 @@ export const PresentationModal: React.FC<PresentationModalProps> = ({
   const nextSlide = () => setCurrentSlide(prev => Math.min(prev + 1, totalSlides - 1));
   const prevSlide = () => setCurrentSlide(prev => Math.max(prev - 1, 0));
 
-  const t1Data = timeframe === 'weeks' ? TOOL1_WEEKS : TOOL1_YEARS;
-  const t2Data = timeframe === 'weeks' ? TOOL2_WEEKS : TOOL2_YEARS;
-  const t3Data = timeframe === 'weeks' ? TOOL3_WEEKS : TOOL3_YEARS;
+  // Tool 1 Dynamic Dataset
+  const t1LiveAdditionalHours = useMemo(() => {
+    return Object.values(appliedMeetingDecisions).reduce((acc: number, curr: AppliedMeetingDecision) => acc + (curr?.hoursSaved || 0), 0);
+  }, [appliedMeetingDecisions]);
+
+  const t1LiveAdditionalKwd = useMemo(() => {
+    return Object.values(appliedMeetingDecisions).reduce((acc: number, curr: AppliedMeetingDecision) => acc + (curr?.kwdSaved || 0), 0);
+  }, [appliedMeetingDecisions]);
+
+  const t1Data = useMemo(() => {
+    const raw = timeframe === 'weeks' ? TOOL1_WEEKS : TOOL1_YEARS;
+    if (t1LiveAdditionalHours === 0) return raw;
+
+    const count = Object.keys(appliedMeetingDecisions).length;
+    const impactFactor = Math.min(0.45, count * 0.09);
+
+    return raw.map(pt => ({
+      ...pt,
+      currentHours: Math.max(1, Math.round(pt.currentHours * (1 - impactFactor))),
+      currentKWD: Math.max(10, Math.round(pt.currentKWD * (1 - impactFactor))),
+      currentUSD: Math.max(30, Math.round(pt.currentUSD * (1 - impactFactor))),
+    }));
+  }, [timeframe, t1LiveAdditionalHours, appliedMeetingDecisions]);
+
+  // Tool 2 Dynamic Dataset
+  const t2LiveAdditionalHours = useMemo(() => {
+    return Object.values(resolvedKnowledgeGaps).reduce((acc: number, curr: ResolvedKnowledgeGap) => acc + (curr?.hoursSaved || 0), 0);
+  }, [resolvedKnowledgeGaps]);
+
+  const t2LiveAdditionalKwd = useMemo(() => {
+    return Object.values(resolvedKnowledgeGaps).reduce((acc: number, curr: ResolvedKnowledgeGap) => acc + (curr?.kwdSaved || 0), 0);
+  }, [resolvedKnowledgeGaps]);
+
+  const t2Data = useMemo(() => {
+    const raw = timeframe === 'weeks' ? TOOL2_WEEKS : TOOL2_YEARS;
+    if (t2LiveAdditionalHours === 0) return raw;
+
+    const count = Object.keys(resolvedKnowledgeGaps).length;
+    const impactFactor = Math.min(0.40, count * 0.10);
+
+    return raw.map(pt => ({
+      ...pt,
+      currentHours: Math.max(1, Math.round(pt.currentHours * (1 - impactFactor))),
+      currentKWD: Math.max(10, Math.round(pt.currentKWD * (1 - impactFactor))),
+      currentUSD: Math.max(30, Math.round(pt.currentUSD * (1 - impactFactor))),
+    }));
+  }, [timeframe, t2LiveAdditionalHours, resolvedKnowledgeGaps]);
+
+  // Tool 3 Dynamic Dataset
+  const t3LiveAdditionalKwd = useMemo(() => {
+    return Object.values(mitigatedWarnings).reduce((acc: number, curr: MitigatedWarningItem) => acc + (curr?.kwdProtected || 0), 0);
+  }, [mitigatedWarnings]);
+
+  const t3LiveAdditionalHours = useMemo(() => {
+    return Object.values(mitigatedWarnings).reduce((acc: number, curr: MitigatedWarningItem) => acc + (curr?.hoursSaved || 0), 0);
+  }, [mitigatedWarnings]);
+
+  const t3Data = useMemo(() => {
+    const raw = timeframe === 'weeks' ? TOOL3_WEEKS : TOOL3_YEARS;
+    if (t3LiveAdditionalKwd === 0) return raw;
+
+    const count = Object.keys(mitigatedWarnings).length;
+    const impactFactor = Math.min(0.50, count * 0.12);
+
+    return raw.map(pt => ({
+      ...pt,
+      currentHours: Math.max(1, Math.round(pt.currentHours * (1 - impactFactor))),
+      currentKWD: Math.max(10, Math.round(pt.currentKWD * (1 - impactFactor))),
+      currentUSD: Math.max(30, Math.round(pt.currentUSD * (1 - impactFactor))),
+    }));
+  }, [timeframe, t3LiveAdditionalKwd, mitigatedWarnings]);
+
+  const t1ReductionPct = useMemo(() => {
+    const count = Object.keys(appliedMeetingDecisions).length;
+    return Math.min(88, 60 + count * 6);
+  }, [appliedMeetingDecisions]);
+
+  const t2ReductionPct = useMemo(() => {
+    const count = Object.keys(resolvedKnowledgeGaps).length;
+    return Math.min(96, 89 + count * 2);
+  }, [resolvedKnowledgeGaps]);
+
+  const t3ReductionPct = useMemo(() => {
+    const count = Object.keys(mitigatedWarnings).length;
+    return Math.min(95, 86 + count * 3);
+  }, [mitigatedWarnings]);
 
   const prevKey = metric === 'hours' ? 'previousHours' : (metric === 'money_kwd' ? 'previousKWD' : 'previousUSD');
   const currKey = metric === 'hours' ? 'currentHours' : (metric === 'money_kwd' ? 'currentKWD' : 'currentUSD');
@@ -257,15 +360,15 @@ export const PresentationModal: React.FC<PresentationModalProps> = ({
                 <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-xs flex flex-col justify-between hover:border-[#8B263E]/40 transition-colors">
                   {/* Card Header */}
                   <div>
-                    <div className="flex items-center justify-between pb-1 border-b border-slate-100">
-                      <div className="flex items-center gap-1.5 min-w-0">
-                        <span className="w-2 h-2 rounded-full bg-[#8B263E] shrink-0"></span>
+                    <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <AppEmblemIcon type="meeting-detox" size="sm" />
                         <h3 className="text-xs font-bold text-[#0A1931] truncate">
-                          {isAr ? '01. تقليص الاجتماعات' : '01. Meeting Detox'}
+                          {isAr ? 'تقليص الاجتماعات' : 'Meeting Detox'}
                         </h3>
                       </div>
                       <span className="text-[9.5px] font-mono font-bold text-[#8B263E] bg-[#8B263E]/10 px-1.5 py-0.5 rounded shrink-0">
-                        -60% {isAr ? 'هدر' : 'Overhead'}
+                        -{t1ReductionPct}% {isAr ? 'هدر' : 'Overhead'}
                       </span>
                     </div>
 
@@ -330,7 +433,9 @@ export const PresentationModal: React.FC<PresentationModalProps> = ({
                   <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[10.5px] font-mono">
                     <span className="text-slate-500 font-sans">{isAr ? 'إجمالي الوفر:' : 'Total Saved:'}</span>
                     <span className="font-bold text-[#8B263E]">
-                      {timeframe === 'weeks' ? '+920 hrs (36.8k KD)' : '+1,840 hrs/yr (73.6k KD)'}
+                      {timeframe === 'weeks' 
+                        ? `+${920 + Math.round(t1LiveAdditionalHours * 0.25)} hrs (${((36800 + t1LiveAdditionalKwd * 0.25) / 1000).toFixed(1)}k KD)` 
+                        : `+${(1840 + t1LiveAdditionalHours).toLocaleString()} hrs/yr (${((73600 + t1LiveAdditionalKwd) / 1000).toFixed(1)}k KD)`}
                     </span>
                   </div>
                 </div>
@@ -339,15 +444,15 @@ export const PresentationModal: React.FC<PresentationModalProps> = ({
                 <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-xs flex flex-col justify-between hover:border-[#0284C7]/40 transition-colors">
                   {/* Card Header */}
                   <div>
-                    <div className="flex items-center justify-between pb-1 border-b border-slate-100">
-                      <div className="flex items-center gap-1.5 min-w-0">
-                        <span className="w-2 h-2 rounded-full bg-[#0284C7] shrink-0"></span>
+                    <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <AppEmblemIcon type="knowledge-intelligence" size="sm" />
                         <h3 className="text-xs font-bold text-[#0A1931] truncate">
-                          {isAr ? '02. فجوات المعرفة و SOPs' : '02. Knowledge SOPs'}
+                          {isAr ? 'فجوات المعرفة و SOPs' : 'Knowledge SOPs'}
                         </h3>
                       </div>
                       <span className="text-[9.5px] font-mono font-bold text-[#0284C7] bg-[#0284C7]/10 px-1.5 py-0.5 rounded shrink-0">
-                        -89% {isAr ? 'زمن بحث' : 'Latency'}
+                        -{t2ReductionPct}% {isAr ? 'زمن بحث' : 'Latency'}
                       </span>
                     </div>
 
@@ -412,7 +517,9 @@ export const PresentationModal: React.FC<PresentationModalProps> = ({
                   <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[10.5px] font-mono">
                     <span className="text-slate-500 font-sans">{isAr ? 'إجمالي الوفر:' : 'Total Saved:'}</span>
                     <span className="font-bold text-[#0284C7]">
-                      {timeframe === 'weeks' ? '+620 hrs (24.8k KD)' : '+1,280 hrs/yr (51.2k KD)'}
+                      {timeframe === 'weeks' 
+                        ? `+${620 + Math.round(t2LiveAdditionalHours * 0.25)} hrs (${((24800 + t2LiveAdditionalKwd * 0.25) / 1000).toFixed(1)}k KD)` 
+                        : `+${(1280 + t2LiveAdditionalHours).toLocaleString()} hrs/yr (${((51200 + t2LiveAdditionalKwd) / 1000).toFixed(1)}k KD)`}
                     </span>
                   </div>
                 </div>
@@ -421,15 +528,15 @@ export const PresentationModal: React.FC<PresentationModalProps> = ({
                 <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-xs flex flex-col justify-between hover:border-[#10B981]/40 transition-colors">
                   {/* Card Header */}
                   <div>
-                    <div className="flex items-center justify-between pb-1 border-b border-slate-100">
-                      <div className="flex items-center gap-1.5 min-w-0">
-                        <span className="w-2 h-2 rounded-full bg-[#10B981] shrink-0"></span>
+                    <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <AppEmblemIcon type="early-warning" size="sm" />
                         <h3 className="text-xs font-bold text-[#0A1931] truncate">
-                          {isAr ? '03. درع الإنذار المبكر' : '03. Early Warning Shield'}
+                          {isAr ? 'درع الإنذار المبكر' : 'Early Warning Shield'}
                         </h3>
                       </div>
                       <span className="text-[9.5px] font-mono font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded shrink-0">
-                        -86% {isAr ? 'تأخير/تعطل' : 'Downtime'}
+                        -{t3ReductionPct}% {isAr ? 'تأخير/تعطل' : 'Downtime'}
                       </span>
                     </div>
 
@@ -494,7 +601,9 @@ export const PresentationModal: React.FC<PresentationModalProps> = ({
                   <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[10.5px] font-mono">
                     <span className="text-slate-500 font-sans">{isAr ? 'إجمالي الوفر:' : 'Total Saved:'}</span>
                     <span className="font-bold text-emerald-700">
-                      {timeframe === 'weeks' ? '+840 hrs (118.5k KD)' : '+1,950 hrs/yr (196.5k KD)'}
+                      {timeframe === 'weeks' 
+                        ? `+${840 + Math.round(t3LiveAdditionalHours * 0.25)} hrs (${((118500 + t3LiveAdditionalKwd * 0.25) / 1000).toFixed(1)}k KD)` 
+                        : `+${(1950 + t3LiveAdditionalHours).toLocaleString()} hrs/yr (${((196500 + t3LiveAdditionalKwd) / 1000).toFixed(1)}k KD)`}
                     </span>
                   </div>
                 </div>
@@ -512,18 +621,28 @@ export const PresentationModal: React.FC<PresentationModalProps> = ({
                       ? 'إجمالي الأثر التراكمي للـ 3 أدوات مجتمعة:' 
                       : 'Combined Multi-Tool Executive Realization:'}
                   </span>
+                  {activeDecisionsCount > 0 && (
+                    <span className="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 font-mono text-[10px] border border-emerald-500/30 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                      <span>{isAr ? `${activeDecisionsCount} قرارات نشطة مطبقة` : `${activeDecisionsCount} Live Decisions Active`}</span>
+                    </span>
+                  )}
                 </div>
                 <div className="flex items-center gap-3 font-mono">
                   <span className="text-emerald-300 font-black">
-                    +{timeframe === 'weeks' ? '2,380 hrs (12 Wks)' : '5,070 hrs/yr'}
+                    +{timeframe === 'weeks' 
+                      ? `${(2380 + Math.round(liveAdditionalHours * 0.25)).toLocaleString()} hrs (12 Wks)` 
+                      : `${totalHoursSaved.toLocaleString()} hrs/yr`}
                   </span>
                   <span className="text-slate-500">|</span>
                   <span className="text-[#FFB800] font-black">
-                    +{timeframe === 'weeks' ? '180,100 KD ($587k)' : '321,300 KD ($1.04M)'}
+                    +{timeframe === 'weeks' 
+                      ? `${(180100 + Math.round(liveAdditionalKwd * 0.25)).toLocaleString()} KD ($${Math.round((180100 + Math.round(liveAdditionalKwd * 0.25)) * 3.26).toLocaleString()})` 
+                      : `${totalKwdSaved.toLocaleString()} KD ($${(Math.round(totalUsdSaved / 1000)).toLocaleString()}k)`}
                   </span>
                   <span className="text-slate-500">|</span>
                   <span className="text-cyan-300 font-bold">
-                    3.4x Velocity Boost
+                    +{(3.4 + Math.min(1.8, activeDecisionsCount * 0.4)).toFixed(1)}x Velocity Boost
                   </span>
                 </div>
               </div>
