@@ -90,7 +90,7 @@ export const ExecutiveHeader: React.FC<ExecutiveHeaderProps> = ({
           {/* Presentation Deck Modal Button */}
           <button
             onClick={onOpenPresentation}
-            className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#8B263E] to-[#721f33] hover:from-[#721f33] hover:to-[#5c1929] transition-all shadow-xs cursor-pointer active:scale-95"
+            className="inline-flex items-center gap-1.5 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#8B263E] to-[#721f33] hover:from-[#721f33] hover:to-[#5c1929] transition-all shadow-xs cursor-pointer active:scale-95 shrink-0"
             title={isAr ? 'عرض المبادرات' : 'Executive Deck'}
           >
             <Presentation className="w-3.5 h-3.5 text-[#FFB800]" />

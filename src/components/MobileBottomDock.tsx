@@ -23,13 +23,13 @@ export const MobileBottomDock: React.FC<MobileBottomDockProps> = ({
   const isAr = lang === 'ar';
 
   return (
-    <div className="sticky bottom-0 z-40 w-full bg-white/95 backdrop-blur-lg border-t border-slate-200/90 shadow-[0_-4px_16px_rgba(0,0,0,0.06)] px-2 py-1.5 font-sans">
-      <div className="max-w-md mx-auto flex items-center justify-between gap-1">
+    <div className="fixed bottom-0 inset-x-0 z-50 w-full bg-white/95 backdrop-blur-xl border-t border-slate-200/90 shadow-[0_-4px_24px_rgba(0,0,0,0.12)] px-2 py-1 pb-[max(0.375rem,env(safe-area-inset-bottom))] font-sans">
+      <div className="max-w-lg mx-auto flex items-center justify-between gap-1">
         
         {/* HOME */}
         <button
           onClick={() => onSelectDemo(null)}
-          className={`flex-1 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5 transition-all cursor-pointer min-h-[44px] ${
+          className={`flex-1 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5 transition-all cursor-pointer min-h-[44px] active:scale-95 ${
             activeDemoId === null
               ? 'bg-[#0A1931] text-white shadow-xs'
               : 'text-slate-600 hover:bg-slate-100'
@@ -42,7 +42,7 @@ export const MobileBottomDock: React.FC<MobileBottomDockProps> = ({
         {/* APP 3: EARLY WARNING */}
         <button
           onClick={() => onSelectDemo('idea-3')}
-          className={`flex-1 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5 transition-all cursor-pointer min-h-[44px] ${
+          className={`flex-1 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5 transition-all cursor-pointer min-h-[44px] active:scale-95 ${
             activeDemoId === 'idea-3'
               ? 'bg-emerald-700 text-white shadow-xs'
               : 'text-slate-600 hover:bg-slate-100'
@@ -55,7 +55,7 @@ export const MobileBottomDock: React.FC<MobileBottomDockProps> = ({
         {/* APP 2: KNOWLEDGE */}
         <button
           onClick={() => onSelectDemo('idea-2')}
-          className={`flex-1 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5 transition-all cursor-pointer min-h-[44px] ${
+          className={`flex-1 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5 transition-all cursor-pointer min-h-[44px] active:scale-95 ${
             activeDemoId === 'idea-2'
               ? 'bg-[#0284C7] text-white shadow-xs'
               : 'text-slate-600 hover:bg-slate-100'
@@ -68,7 +68,7 @@ export const MobileBottomDock: React.FC<MobileBottomDockProps> = ({
         {/* APP 1: MEETINGS */}
         <button
           onClick={() => onSelectDemo('idea-1')}
-          className={`flex-1 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5 transition-all cursor-pointer min-h-[44px] ${
+          className={`flex-1 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5 transition-all cursor-pointer min-h-[44px] active:scale-95 ${
             activeDemoId === 'idea-1'
               ? 'bg-[#8B263E] text-white shadow-xs'
               : 'text-slate-600 hover:bg-slate-100'
@@ -81,7 +81,7 @@ export const MobileBottomDock: React.FC<MobileBottomDockProps> = ({
         {/* DECK */}
         <button
           onClick={onOpenPresentation}
-          className="flex-1 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5 transition-all cursor-pointer min-h-[44px] bg-amber-500/10 text-amber-900 border border-amber-300/60 active:scale-95"
+          className="flex-1 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5 transition-all cursor-pointer min-h-[44px] bg-amber-500/10 text-amber-950 border border-amber-300/80 active:scale-95"
         >
           <Presentation className="w-4 h-4 text-amber-700" />
           <span className="text-[9.5px] font-bold">{isAr ? 'العرض' : 'Deck'}</span>
@@ -90,7 +90,7 @@ export const MobileBottomDock: React.FC<MobileBottomDockProps> = ({
         {/* LANG TOGGLE */}
         <button
           onClick={onToggleLang}
-          className="py-1.5 px-2 rounded-xl flex flex-col items-center justify-center gap-0.5 text-slate-700 hover:bg-slate-100 cursor-pointer min-h-[44px]"
+          className="py-1.5 px-2 rounded-xl flex flex-col items-center justify-center gap-0.5 text-slate-700 hover:bg-slate-100 cursor-pointer min-h-[44px] active:scale-95"
           title="Toggle Language"
         >
           <Globe className="w-3.5 h-3.5 text-[#8B263E]" />

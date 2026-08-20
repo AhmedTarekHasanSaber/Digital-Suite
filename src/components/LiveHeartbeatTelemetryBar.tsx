@@ -171,10 +171,10 @@ export const LiveHeartbeatTelemetryBar: React.FC<LiveHeartbeatTelemetryBarProps>
         {/* Ambient Top Glow Line */}
         <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-emerald-500 via-[#FFB800] to-cyan-500" />
 
-        <div className="relative z-10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 sm:gap-3">
+        <div className="relative z-10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2 sm:gap-3">
           
-          {/* LEFT: Real-Time Telemetry Status Badge & Live Counter */}
-          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0 flex-wrap sm:flex-nowrap">
+          {/* TOP/LEFT: Real-Time Telemetry Status Badge & Live Counter */}
+          <div className="flex items-center justify-between sm:justify-start gap-2.5 sm:gap-3 shrink-0">
             
             {/* Pulsing Beacon Pill */}
             <div className="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-rose-950/70 border border-rose-500/30 shadow-xs">
@@ -190,12 +190,12 @@ export const LiveHeartbeatTelemetryBar: React.FC<LiveHeartbeatTelemetryBarProps>
             </div>
 
             {/* Live Counter */}
-            <div className="flex items-center gap-1.5 font-mono">
+            <div className="flex items-center gap-1.5 font-mono text-end sm:text-start">
               <div className="flex flex-col">
-                <span className="text-[9px] text-slate-400 font-sans font-bold uppercase tracking-wider">
+                <span className="text-[8.5px] sm:text-[9px] text-slate-400 font-sans font-bold uppercase tracking-wider">
                   {isAr ? 'البيانات المعالجة' : 'Processed Events'}
                 </span>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center justify-end sm:justify-start gap-1">
                   <span className="text-xs sm:text-sm font-black text-white">
                     {totalEventsAnalyzed.toLocaleString()}
                   </span>
@@ -218,7 +218,7 @@ export const LiveHeartbeatTelemetryBar: React.FC<LiveHeartbeatTelemetryBarProps>
           </div>
 
           {/* MIDDLE: Event Stream with Translucent Centered ECG Pulse in the Background ONLY */}
-          <div className="relative flex-1 min-w-0 bg-slate-900/90 rounded-xl px-3 py-1.5 border border-slate-700/60 overflow-hidden flex items-center justify-between gap-2 shadow-inner">
+          <div className="relative flex-1 min-w-0 bg-slate-900/90 rounded-xl px-2.5 sm:px-3 py-2 border border-slate-700/60 overflow-hidden flex items-center justify-between gap-2 shadow-inner">
             
             {/* 1. SINGLE CRISP CENTERED ECG PULSE IN BACKGROUND (Fires once on new event, then fades away) */}
             <div className="absolute inset-0 pointer-events-none z-0">
@@ -232,9 +232,9 @@ export const LiveHeartbeatTelemetryBar: React.FC<LiveHeartbeatTelemetryBarProps>
               }`}
             />
 
-            {/* 3. HIGH-CONTRAST, SUPER-CLEAR FOREGROUND TEXT LAYER */}
-            <div className="relative z-10 flex items-center gap-2 min-w-0 overflow-hidden py-0.5">
-              <div className={`p-1 rounded-md transition-colors duration-300 shrink-0 ${
+            {/* 3. HIGH-CONTRAST, NATURAL FLOWING FOREGROUND TEXT LAYER */}
+            <div className="relative z-10 flex items-start sm:items-center gap-2 min-w-0 overflow-hidden py-0.5 w-full">
+              <div className={`p-1 rounded-md transition-colors duration-300 shrink-0 mt-0.5 sm:mt-0 ${
                 eventFlash 
                   ? 'bg-cyan-500/30 text-cyan-300 border border-cyan-400/50' 
                   : 'bg-slate-800 text-cyan-400 border border-slate-700'
@@ -249,20 +249,20 @@ export const LiveHeartbeatTelemetryBar: React.FC<LiveHeartbeatTelemetryBarProps>
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: isAr ? -8 : 8 }}
                   transition={{ duration: 0.35, ease: 'easeOut' }}
-                  className="flex items-center gap-2 min-w-0 text-[11.5px]"
+                  className="min-w-0 text-[11px] sm:text-[11.5px] leading-snug break-words"
                 >
-                  <span className="font-bold text-[#FFB800] shrink-0 font-mono tracking-tight drop-shadow-xs">
+                  <span className="font-bold text-[#FFB800] font-mono tracking-tight drop-shadow-xs inline-block mr-1.5 rtl:mr-0 rtl:ml-1.5">
                     [{isAr ? activeEvent.squadAr : activeEvent.squadEn}]
                   </span>
-                  <span className="text-slate-100 font-medium whitespace-normal sm:truncate drop-shadow-xs">
+                  <span className="text-slate-100 font-medium drop-shadow-xs">
                     {isAr ? activeEvent.actionAr : activeEvent.actionEn}
                   </span>
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            <div className="relative z-10 shrink-0 flex items-center">
-              <span className={`hidden lg:inline-flex items-center gap-1 text-[9px] font-mono px-2 py-0.5 rounded-full border transition-all duration-300 ${
+            <div className="relative z-10 shrink-0 hidden sm:flex items-center">
+              <span className={`inline-flex items-center gap-1 text-[9px] font-mono px-2 py-0.5 rounded-full border transition-all duration-300 ${
                 eventFlash 
                   ? 'text-emerald-300 bg-emerald-950 border-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.3)]' 
                   : 'text-slate-400 bg-slate-800/80 border-slate-700'
@@ -275,7 +275,19 @@ export const LiveHeartbeatTelemetryBar: React.FC<LiveHeartbeatTelemetryBarProps>
             </div>
           </div>
 
-          {/* RIGHT: High-Impact CIO Executive Value Metrics */}
+          {/* MOBILE-ONLY COMPACT EXECUTIVE VALUE METRICS ROW */}
+          <div className="flex sm:hidden items-center justify-between gap-2 pt-0.5">
+            <div className="flex-1 flex items-center justify-between px-2.5 py-1 rounded-lg bg-emerald-950/70 border border-emerald-500/40 text-[10.5px]">
+              <span className="text-emerald-300/80 font-bold">{isAr ? 'الوفر التراكمي' : 'Savings'}</span>
+              <span className="font-bold font-mono text-emerald-300">{formattedUsd}<span className="text-[9px] font-sans font-normal">{isAr ? '/س' : '/yr'}</span></span>
+            </div>
+            <div className="flex-1 flex items-center justify-between px-2.5 py-1 rounded-lg bg-sky-950/70 border border-sky-500/40 text-[10.5px]">
+              <span className="text-sky-300/80 font-bold">{isAr ? 'ساعات محررة' : 'Decoupled'}</span>
+              <span className="font-bold font-mono text-sky-300">{formattedHours}<span className="text-[9px] font-sans font-normal">{isAr ? ' س/س' : 'h/yr'}</span></span>
+            </div>
+          </div>
+
+          {/* DESKTOP/TABLET RIGHT: High-Impact CIO Executive Value Metrics */}
           <div className="hidden sm:flex items-center gap-2.5 lg:gap-3 shrink-0 text-start sm:text-end">
             
             {/* Active Decisions Real-time Indicator if any decisions were taken */}

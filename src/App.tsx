@@ -103,7 +103,7 @@ function MainApp() {
     <div 
       className={`bg-[#F4F7FA] text-slate-900 flex flex-col font-sans selection:bg-[#FFB800] selection:text-[#0A1931] ${
         isMobileView 
-          ? 'min-h-screen overflow-y-auto pb-16' 
+          ? 'min-h-screen overflow-y-auto pb-20' 
           : 'min-h-screen lg:h-screen lg:max-h-screen overflow-y-auto lg:overflow-hidden'
       }`}
     >
@@ -122,7 +122,7 @@ function MainApp() {
       {/* Main Content Area - Responsive Scroll on Mobile, Single Screen on PC */}
       <main 
         className={`flex-1 min-h-0 w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-1.5 sm:py-2.5 flex flex-col ${
-          isMobileView ? 'overflow-visible' : 'overflow-y-auto lg:overflow-hidden'
+          isMobileView ? 'overflow-visible pb-10' : 'overflow-y-auto lg:overflow-hidden'
         }`}
       >
         
