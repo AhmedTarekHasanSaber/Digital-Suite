@@ -706,12 +706,7 @@ export const DemoTwoView: React.FC<DemoTwoViewProps> = ({ idea, lang }) => {
               return (
                 <motion.div
                   key={gap.id}
-                  onClick={() => {
-                    setSelectedGap(gap);
-                    if (window.innerWidth < 1024) {
-                      setMobileTab('engine');
-                    }
-                  }}
+                  onClick={() => setSelectedGap(gap)}
                   whileHover={{ scale: 1.005 }}
                   className={`p-3 rounded-xl border transition-all cursor-pointer ${
                     isSelected

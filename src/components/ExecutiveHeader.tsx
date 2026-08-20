@@ -3,6 +3,7 @@ import { Language } from '../types';
 import { Globe, Presentation, ArrowRight, ArrowLeft } from 'lucide-react';
 import { BoubyanOfficialLogo } from './BoubyanOfficialLogo';
 import { AppEmblemIcon } from './AppEmblemIcons';
+import { DeviceModeSwitcher } from './DeviceModeSwitcher';
 
 interface ExecutiveHeaderProps {
   lang: Language;
@@ -83,6 +84,9 @@ export const ExecutiveHeader: React.FC<ExecutiveHeaderProps> = ({
 
         {/* Right Side: Functional Executive Actions */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+          {/* Automatic Platform & Device Mode Switcher */}
+          <DeviceModeSwitcher lang={lang} />
+
           {/* Presentation Deck Modal Button */}
           <button
             onClick={onOpenPresentation}

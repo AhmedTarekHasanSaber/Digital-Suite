@@ -1,14 +1,22 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Language } from '../types';
 import { 
+  Activity, 
+  Radio, 
+  Sparkles, 
+  ShieldCheck, 
   Cpu, 
+  RefreshCw, 
+  Terminal, 
+  ChevronRight,
   TrendingUp,
-  Clock,
   Zap,
-  Sparkles
+  Clock,
+  DollarSign,
+  ArrowUpRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { RealisticEcgCanvas } from './RealisticEcgCanvas';
+import { HeartbeatCenterPulse } from './HeartbeatCenterPulse';
 import { useExecutiveMetrics } from '../context/ExecutiveMetricsContext';
 
 interface LiveHeartbeatTelemetryBarProps {
@@ -79,7 +87,7 @@ const TELEMETRY_STREAM_POOL: Omit<TelemetryEvent, 'id' | 'latencyMs'>[] = [
 
 export const LiveHeartbeatTelemetryBar: React.FC<LiveHeartbeatTelemetryBarProps> = ({ lang }) => {
   const isAr = lang === 'ar';
-  const { totalHoursSaved, totalUsdSaved, activeDecisionsCount, liveAdditionalHours, liveAdditionalUsd } = useExecutiveMetrics();
+  const { totalHoursSaved, totalUsdSaved, totalKwdSaved, activeDecisionsCount, liveAdditionalHours, liveAdditionalUsd } = useExecutiveMetrics();
   
   // Real-time auto-incrementing counters
   const [totalEventsAnalyzed, setTotalEventsAnalyzed] = useState(2849120);
@@ -105,27 +113,43 @@ export const LiveHeartbeatTelemetryBar: React.FC<LiveHeartbeatTelemetryBarProps>
     setTimeout(() => setActiveHeartbeatPulse(false), 450);
   }, []);
 
-  // NATURAL, NON-UNIFORM EVENT ARRIVAL GENERATOR (Random intervals between 3.8s and 8.2s)
+  // NATURAL, NON-UNIFORM EVENT ARRIVAL GENERATOR
   useEffect(() => {
+    // Initial immediate pulse on load so the user sees it right away
+    const initialTimer = setTimeout(() => {
+      setEventFlash(true);
+      setActiveHeartbeatPulse(true);
+      setTimeout(() => {
+        setEventFlash(false);
+        setActiveHeartbeatPulse(false);
+      }, 1600);
+    }, 400);
+
     let timeoutId: NodeJS.Timeout;
 
     const scheduleNextEvent = () => {
-      const naturalDelay = Math.floor(Math.random() * 4400) + 3800;
+      // Natural jitter: random interval between 3800ms and 7200ms
+      const naturalDelay = Math.floor(Math.random() * 3400) + 3800;
 
       timeoutId = setTimeout(() => {
+        // 1. Advance to next event
         setCurrentEventIndex(prev => (prev + 1) % TELEMETRY_STREAM_POOL.length);
 
-        setTriggerSpike(true);
-        setTimeout(() => setTriggerSpike(false), 200);
-
+        // 2. Trigger synchronized single strong center heartbeat pulse
         setEventFlash(true);
-        setTimeout(() => setEventFlash(false), 1400);
+        setActiveHeartbeatPulse(true);
+        setTimeout(() => {
+          setEventFlash(false);
+          setActiveHeartbeatPulse(false);
+        }, 1600);
 
+        // 3. Update data counters
         const delta = Math.floor(Math.random() * 9) + 4;
         setTotalEventsAnalyzed(prev => prev + delta);
         setRecentIncrement(delta);
         setTimeout(() => setRecentIncrement(null), 1200);
 
+        // Schedule next random arrival
         scheduleNextEvent();
       }, naturalDelay);
     };
@@ -133,6 +157,7 @@ export const LiveHeartbeatTelemetryBar: React.FC<LiveHeartbeatTelemetryBarProps>
     scheduleNextEvent();
 
     return () => {
+      clearTimeout(initialTimer);
       clearTimeout(timeoutId);
     };
   }, []);
@@ -141,57 +166,15 @@ export const LiveHeartbeatTelemetryBar: React.FC<LiveHeartbeatTelemetryBarProps>
 
   return (
     <div className="shrink-0 w-full mb-2 sm:mb-2.5">
-      <div className="relative overflow-hidden rounded-2xl bg-[#0A1931] border border-slate-700/80 shadow-md text-white p-2.5 sm:p-3 flex flex-col gap-2 justify-center">
+      <div className="relative overflow-hidden rounded-2xl bg-[#0A1931] border border-slate-700/80 shadow-md text-white p-2.5 sm:p-3 min-h-[66px] flex flex-col justify-center">
         
         {/* Ambient Top Glow Line */}
         <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-emerald-500 via-[#FFB800] to-cyan-500" />
 
-        {/* MOBILE TOP ROW (Visible on small screens < md) to showcase high impact ROI numbers */}
-        <div className="flex md:hidden items-center justify-between gap-2 border-b border-slate-800 pb-2">
-          {/* Beacon + Counter */}
-          <div className="flex items-center gap-2 min-w-0">
-            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-rose-950/80 border border-rose-500/40 shrink-0">
-              <span className="relative flex h-2 w-2">
-                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-70 ${
-                  activeHeartbeatPulse ? 'scale-150 duration-300' : ''
-                }`}></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
-              </span>
-              <span className="text-[10px] font-bold text-rose-300 font-mono">
-                {isAr ? 'بث حي' : 'LIVE'}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-1 font-mono text-xs">
-              <span className="font-bold text-slate-200">
-                {totalEventsAnalyzed.toLocaleString()}
-              </span>
-              {recentIncrement && (
-                <span className="text-[9px] font-bold text-[#FFB800] bg-amber-950/90 px-1 rounded border border-amber-500/30">
-                  +{recentIncrement}
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Quick Metrics Badges for Mobile */}
-          <div className="flex items-center gap-1.5 shrink-0 font-mono text-[10.5px]">
-            <div className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 font-bold">
-              <TrendingUp className="w-3 h-3 text-emerald-400" />
-              <span>{formattedUsd}</span>
-            </div>
-            <div className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-sky-950/80 border border-sky-500/40 text-sky-300 font-bold">
-              <Clock className="w-3 h-3 text-sky-400" />
-              <span>{formattedHours}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* DESKTOP & FULL RESPONSIVE ROW */}
-        <div className="relative z-10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2 sm:gap-3">
+        <div className="relative z-10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 sm:gap-3">
           
-          {/* DESKTOP LEFT: Real-Time Telemetry Status Badge & Live Counter */}
-          <div className="hidden md:flex items-center gap-2.5 sm:gap-3 shrink-0">
+          {/* LEFT: Real-Time Telemetry Status Badge & Live Counter */}
+          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0 flex-wrap sm:flex-nowrap">
             
             {/* Pulsing Beacon Pill */}
             <div className="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-rose-950/70 border border-rose-500/30 shadow-xs">
@@ -234,33 +217,22 @@ export const LiveHeartbeatTelemetryBar: React.FC<LiveHeartbeatTelemetryBarProps>
 
           </div>
 
-          {/* MIDDLE: Event Stream with Translucent ECG Pulse Wave in the Background ONLY */}
-          <div className="relative flex-1 min-w-0 bg-slate-900/90 rounded-xl px-2.5 sm:px-3 py-1.5 border border-slate-700/60 overflow-hidden flex items-center justify-between gap-2 shadow-inner min-h-[36px]">
+          {/* MIDDLE: Event Stream with Translucent Centered ECG Pulse in the Background ONLY */}
+          <div className="relative flex-1 min-w-0 bg-slate-900/90 rounded-xl px-3 py-1.5 border border-slate-700/60 overflow-hidden flex items-center justify-between gap-2 shadow-inner">
             
-            {/* 1. REAL-TIME TRANSLUCENT ECG CANVAS IN BACKGROUND */}
-            <div className="absolute inset-0 pointer-events-none z-0 opacity-60">
-              <RealisticEcgCanvas 
-                onPulsePeak={handlePulsePeak} 
-                triggerSpike={triggerSpike} 
-                isFlashing={eventFlash} 
-              />
+            {/* 1. SINGLE CRISP CENTERED ECG PULSE IN BACKGROUND (Fires once on new event, then fades away) */}
+            <div className="absolute inset-0 pointer-events-none z-0">
+              <HeartbeatCenterPulse isPulsing={eventFlash} />
             </div>
 
-            {/* 2. SUBTLE TRANSLUCENT BACKGROUND WAVE EFFECT */}
+            {/* 2. SUBTLE TRANSLUCENT BACKGROUND ACCENT - Synchronized with arrival */}
             <div 
-              className={`absolute inset-0 pointer-events-none transition-opacity duration-700 ease-out bg-gradient-to-r from-cyan-500/10 via-emerald-500/15 to-transparent z-0 ${
+              className={`absolute inset-0 pointer-events-none transition-opacity duration-700 ease-out bg-gradient-to-r from-transparent via-cyan-500/10 to-transparent z-0 ${
                 eventFlash ? 'opacity-100' : 'opacity-0'
               }`}
             />
 
-            {/* 3. Subtle traveling scan beam on arrival */}
-            <div 
-              className={`absolute top-0 bottom-0 left-0 w-32 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none transition-transform duration-1000 ease-out z-0 ${
-                eventFlash ? 'translate-x-[600px]' : '-translate-x-full'
-              }`}
-            />
-
-            {/* 4. HIGH-CONTRAST, SUPER-CLEAR FOREGROUND TEXT LAYER */}
+            {/* 3. HIGH-CONTRAST, SUPER-CLEAR FOREGROUND TEXT LAYER */}
             <div className="relative z-10 flex items-center gap-2 min-w-0 overflow-hidden py-0.5">
               <div className={`p-1 rounded-md transition-colors duration-300 shrink-0 ${
                 eventFlash 
@@ -277,12 +249,12 @@ export const LiveHeartbeatTelemetryBar: React.FC<LiveHeartbeatTelemetryBarProps>
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: isAr ? -8 : 8 }}
                   transition={{ duration: 0.35, ease: 'easeOut' }}
-                  className="flex items-center gap-1.5 sm:gap-2 min-w-0 text-[11px] sm:text-[11.5px]"
+                  className="flex items-center gap-2 min-w-0 text-[11.5px]"
                 >
-                  <span className="font-bold text-[#FFB800] shrink-0 font-mono tracking-tight drop-shadow-xs text-[10px] sm:text-[11px]">
+                  <span className="font-bold text-[#FFB800] shrink-0 font-mono tracking-tight drop-shadow-xs">
                     [{isAr ? activeEvent.squadAr : activeEvent.squadEn}]
                   </span>
-                  <span className="text-slate-100 font-medium truncate drop-shadow-xs">
+                  <span className="text-slate-100 font-medium whitespace-normal sm:truncate drop-shadow-xs">
                     {isAr ? activeEvent.actionAr : activeEvent.actionEn}
                   </span>
                 </motion.div>
@@ -290,7 +262,7 @@ export const LiveHeartbeatTelemetryBar: React.FC<LiveHeartbeatTelemetryBarProps>
             </div>
 
             <div className="relative z-10 shrink-0 flex items-center">
-              <span className={`inline-flex items-center gap-1 text-[8.5px] sm:text-[9px] font-mono px-1.5 sm:px-2 py-0.5 rounded-full border transition-all duration-300 ${
+              <span className={`hidden lg:inline-flex items-center gap-1 text-[9px] font-mono px-2 py-0.5 rounded-full border transition-all duration-300 ${
                 eventFlash 
                   ? 'text-emerald-300 bg-emerald-950 border-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.3)]' 
                   : 'text-slate-400 bg-slate-800/80 border-slate-700'
@@ -303,10 +275,10 @@ export const LiveHeartbeatTelemetryBar: React.FC<LiveHeartbeatTelemetryBarProps>
             </div>
           </div>
 
-          {/* DESKTOP RIGHT: High-Impact CIO Executive Value Metrics */}
-          <div className="hidden md:flex items-center gap-2.5 lg:gap-3 shrink-0 text-start sm:text-end">
+          {/* RIGHT: High-Impact CIO Executive Value Metrics */}
+          <div className="hidden sm:flex items-center gap-2.5 lg:gap-3 shrink-0 text-start sm:text-end">
             
-            {/* Active Decisions Real-time Indicator */}
+            {/* Active Decisions Real-time Indicator if any decisions were taken */}
             {activeDecisionsCount > 0 && (
               <motion.div 
                 initial={{ scale: 0.8, opacity: 0 }}

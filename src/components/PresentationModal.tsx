@@ -238,29 +238,29 @@ export const PresentationModal: React.FC<PresentationModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 md:p-6 bg-slate-900/80 backdrop-blur-md font-sans">
-      <div className="relative w-full max-w-5xl h-full sm:h-[92vh] sm:max-h-[750px] rounded-none sm:rounded-2xl bg-white border-0 sm:border border-slate-200 shadow-2xl flex flex-col overflow-hidden text-slate-800">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-slate-900/75 backdrop-blur-md font-sans">
+      <div className="relative w-full max-w-5xl h-[92vh] max-h-[750px] rounded-2xl bg-white border border-slate-200 shadow-2xl flex flex-col overflow-hidden text-slate-800">
         
         {/* Top Presentation Bar with Boubyan Corporate Look */}
-        <div className="p-3 sm:p-4 border-b border-slate-200 bg-[#0A1931] text-white flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-            <div className="w-8 h-8 rounded-lg bg-[#8B263E] border border-white/20 flex items-center justify-center shrink-0">
+        <div className="p-3.5 sm:p-4 border-b border-slate-200 bg-[#0A1931] text-white flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-[#8B263E] border border-white/20 flex items-center justify-center">
               <Presentation className="w-4 h-4 text-[#FFB800]" />
             </div>
-            <div className="min-w-0">
-              <div className="text-xs sm:text-sm font-bold text-white flex items-center gap-2 truncate">
-                <span className="truncate">{isAr ? 'عرض الإدارة التنفيذية — بنك بوبيان' : 'Boubyan Executive Strategic Deck'}</span>
-                <span className="hidden md:inline-block px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[10px] border border-emerald-500/30">
+            <div>
+              <div className="text-sm font-bold text-white flex items-center gap-2">
+                <span>{isAr ? 'عرض الإدارة التنفيذية — بنك بوبيان' : 'Boubyan Executive Strategic Presentation'}</span>
+                <span className="hidden sm:inline-block px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[10px] border border-emerald-500/30">
                   {isAr ? 'مقارنة الأثر المباشر (3 أدوات)' : 'Live 3-Tool Impact Shift'}
                 </span>
               </div>
-              <div className="text-[10.5px] sm:text-xs text-slate-300 font-mono">
+              <div className="text-xs text-slate-300 font-mono">
                 {isAr ? `شريحة ${currentSlide + 1} من ${totalSlides}` : `Slide ${currentSlide + 1} of ${totalSlides}`}
               </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2">
             <button
               onClick={onClose}
               className="p-1.5 rounded-lg text-slate-300 hover:text-white bg-white/10 hover:bg-white/20 transition-colors cursor-pointer"

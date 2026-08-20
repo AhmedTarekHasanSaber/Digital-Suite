@@ -46,28 +46,28 @@ export const CustomizeIdeasModal: React.FC<CustomizeIdeasModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-6 bg-slate-900/75 backdrop-blur-md font-sans">
-      <div className="relative w-full max-w-4xl h-full sm:h-auto max-h-none sm:max-h-[90vh] rounded-none sm:rounded-2xl bg-white border-0 sm:border border-slate-200 shadow-2xl flex flex-col overflow-hidden text-slate-800">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-900/70 backdrop-blur-md font-sans">
+      <div className="relative w-full max-w-4xl max-h-[90vh] rounded-2xl bg-white border border-slate-200 shadow-2xl flex flex-col overflow-hidden text-slate-800">
         
         {/* Top Header */}
-        <div className="p-3.5 sm:p-5 border-b border-slate-200 bg-[#0A1931] text-white flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-            <div className="w-8 h-8 rounded-lg bg-[#8B263E] border border-white/20 flex items-center justify-center shrink-0">
+        <div className="p-4 sm:p-5 border-b border-slate-200 bg-[#0A1931] text-white flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-[#8B263E] border border-white/20 flex items-center justify-center">
               <Edit3 className="w-4 h-4 text-[#FFB800]" />
             </div>
-            <div className="min-w-0">
-              <h3 className="text-xs sm:text-sm font-bold text-white truncate">
+            <div>
+              <h3 className="text-sm font-bold text-white">
                 {isAr ? 'تخصيص المبادرات الرقمية — بنك بوبيان' : 'Customize Boubyan Strategic Initiatives'}
               </h3>
-              <p className="text-[10.5px] sm:text-xs text-slate-300 truncate">
-                {isAr ? 'عدّل نصوص وعناوين وعائد كل فكرة لتناسب عرضك' : 'Edit titles, descriptions, and metrics for your presentation'}
+              <p className="text-xs text-slate-300">
+                {isAr ? 'عدّل نصوص وعناوين وعائد كل فكرة لتناسب عرضك المباشر للإدارة التنفيذية' : 'Edit titles, descriptions, and metrics for your executive presentation'}
               </p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-300 hover:text-white bg-white/10 hover:bg-white/20 transition-colors cursor-pointer shrink-0"
+            className="p-1.5 rounded-lg text-slate-300 hover:text-white bg-white/10 hover:bg-white/20 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
