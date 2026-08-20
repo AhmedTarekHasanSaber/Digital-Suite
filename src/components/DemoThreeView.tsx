@@ -1075,7 +1075,12 @@ export const DemoThreeView: React.FC<DemoThreeViewProps> = ({ idea, lang }) => {
               return (
                 <motion.div
                   key={warning.id}
-                  onClick={() => setSelectedWarning(warning)}
+                  onClick={() => {
+                    setSelectedWarning(warning);
+                    if (window.innerWidth < 1024) {
+                      setMobileTab('diagnostic');
+                    }
+                  }}
                   whileHover={{ scale: 1.005 }}
                   className={`p-3 rounded-xl border transition-all cursor-pointer ${
                     isSelected

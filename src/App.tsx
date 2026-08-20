@@ -75,47 +75,47 @@ function MainApp() {
       />
 
       {/* Main Content Area - Responsive Scroll on Mobile, Single Screen on Desktop */}
-      <main className="flex-1 min-h-0 w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-1.5 sm:py-2.5 flex flex-col overflow-y-auto lg:overflow-hidden">
+      <main className="flex-1 min-h-0 w-full max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-1.5 sm:py-2.5 pb-6 sm:pb-2.5 flex flex-col overflow-y-auto lg:overflow-hidden">
         
         {/* Mobile Fast-Switcher Bar when inside a Tool (Visible on mobile/tablet screens < lg) */}
         {activeDemoId !== null && (
-          <div className="lg:hidden shrink-0 mb-2 p-1 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center gap-1 overflow-x-auto text-[11px] font-bold">
+          <div className="lg:hidden shrink-0 mb-2 p-1 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-between gap-1 overflow-x-auto text-[11px] font-bold no-scrollbar">
             <button
               onClick={() => setActiveDemoId('idea-3')}
-              className={`px-2.5 py-1.5 rounded-lg shrink-0 transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`flex-1 min-w-[85px] py-2 px-2 rounded-lg shrink-0 transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-95 ${
                 activeDemoId === 'idea-3'
                   ? 'bg-[#059669] text-white shadow-xs'
                   : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
               }`}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#34D399]"></span>
-              <span>{isAr ? '01. رادار الإنذار' : '01. Early Shield'}</span>
+              <span className="w-2 h-2 rounded-full bg-[#34D399]"></span>
+              <span className="truncate">{isAr ? '01. الإنذار' : '01. Radar'}</span>
             </button>
             <button
               onClick={() => setActiveDemoId('idea-2')}
-              className={`px-2.5 py-1.5 rounded-lg shrink-0 transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`flex-1 min-w-[85px] py-2 px-2 rounded-lg shrink-0 transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-95 ${
                 activeDemoId === 'idea-2'
                   ? 'bg-[#0284C7] text-white shadow-xs'
                   : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
               }`}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#38BDF8]"></span>
-              <span>{isAr ? '02. المعرفة SOPs' : '02. Knowledge'}</span>
+              <span className="w-2 h-2 rounded-full bg-[#38BDF8]"></span>
+              <span className="truncate">{isAr ? '02. المعرفة' : '02. SOPs'}</span>
             </button>
             <button
               onClick={() => setActiveDemoId('idea-1')}
-              className={`px-2.5 py-1.5 rounded-lg shrink-0 transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`flex-1 min-w-[85px] py-2 px-2 rounded-lg shrink-0 transition-all cursor-pointer flex items-center justify-center gap-1.5 active:scale-95 ${
                 activeDemoId === 'idea-1'
                   ? 'bg-[#9A1B38] text-white shadow-xs'
                   : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
               }`}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FFB800]"></span>
-              <span>{isAr ? '03. الاجتماعات' : '03. Meetings'}</span>
+              <span className="w-2 h-2 rounded-full bg-[#FFB800]"></span>
+              <span className="truncate">{isAr ? '03. الاجتماعات' : '03. Sync'}</span>
             </button>
             <button
               onClick={() => setIsPresentationOpen(true)}
-              className="px-2.5 py-1.5 rounded-lg shrink-0 bg-amber-50 text-amber-900 border border-amber-200 transition-all cursor-pointer flex items-center gap-1 hover:bg-amber-100"
+              className="py-2 px-2.5 rounded-lg shrink-0 bg-amber-50 text-amber-900 border border-amber-200 transition-all cursor-pointer flex items-center gap-1 hover:bg-amber-100 active:scale-95"
             >
               <span>{isAr ? '📊 العرض' : '📊 Deck'}</span>
             </button>
